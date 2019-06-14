@@ -1,0 +1,47 @@
+language: node_js
+node_js:
+  - node
+
+os:
+- linux
+- osx
+
+dist: trusty
+osx_image: xcode8.3
+sudo: false
+
+notifications:
+  email: false
+
+cache:
+  yarn: true
+  directories:
+  - node_modules
+  - $HOME/.cache/electron
+
+addons:
+  apt:
+    packages:
+    - fakeroot
+    - rpm
+
+branches:
+  only:
+  - master
+  - /^v\d+\.\d+\.\d+/
+
+install:
+- npm install
+- npm update
+
+script:
+- npm run lint
+- if [ -z $TRAVIS_TAG ]; then
+    if [ $TRAVIS_OS_NAME = linux ]; then
+      npx semantic-release;
+    fi;
+    npm run make;
+  else
+    npm version $TRAVIS_TAG --no-git-tag-version;
+    npm run publish;
+  fi
