@@ -1,70 +1,53 @@
 {
   "name": "solminer",
   "productName": "solminer",
-  "version": "1.0.0",
-  "description": "My Electron application description",
+  "version": "0.0.0-development",
+  "description": "Solana Replicator Miner",
+  "repository": "solana-labs/solminer",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --cache --color --ext .jsx,.js src"
+    "eslint": "eslint --cache --color --ext .jsx,.js .",
+    "lint": "npm-run-all --serial pretty eslint",
+    "pretty": "prettier --write **/*.jsx **/*.js *.js .*.js"
   },
   "keywords": [],
-  "author": "mvines",
+  "author": "Solana Maintainers <maintainers@solana.com>",
   "license": "MIT",
   "config": {
-    "forge": {
-      "make_targets": {
-        "win32": [
-          "squirrel"
-        ],
-        "darwin": [
-          "zip"
-        ],
-        "linux": [
-          "deb",
-          "rpm"
-        ]
-      },
-      "electronPackagerConfig": {
-        "packageManager": "yarn"
-      },
-      "electronWinstallerConfig": {
-        "name": "solminer"
-      },
-      "electronInstallerDebian": {},
-      "electronInstallerRedhat": {},
-      "github_repository": {
-        "owner": "",
-        "name": ""
-      },
-      "windowsStoreConfig": {
-        "packageName": "",
-        "name": "solminer"
-      }
-    }
+    "forge": "./forge.config.js"
   },
   "dependencies": {
+    "@solana/web3.js": "^0.16.2",
     "electron-compile": "^6.4.4",
     "electron-devtools-installer": "^2.1.0",
     "electron-squirrel-startup": "^1.0.0",
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1",
-    "react-hot-loader": "^3.0.0-beta.6"
+    "npm-run-all": "^4.1.5",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-hot-loader": "^4.11.0",
+    "update-electron-app": "^1.4.2"
   },
   "devDependencies": {
+    "@semantic-release/github": "^5.4.0",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-es2015-classes": "^6.24.1",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "electron-forge": "^5.2.4",
     "electron-prebuilt-compile": "4.0.0",
-    "eslint": "^3",
+    "eslint": "^4",
     "eslint-config-airbnb": "^15",
     "eslint-plugin-import": "^2",
     "eslint-plugin-jsx-a11y": "^5",
-    "eslint-plugin-react": "^7"
+    "eslint-plugin-react": "^7",
+    "prettier": "^1.18.2",
+    "semantic-release": "^15.13.16"
+  },
+  "optionalDependencies": {
+    "appdmg": "^0.6.0"
   }
 }
