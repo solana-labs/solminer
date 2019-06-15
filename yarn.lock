@@ -207,10 +207,10 @@
     into-stream "^5.0.0"
     lodash "^4.17.4"
 
-"@solana/web3.js@^0.16.2":
-  version "0.16.2"
-  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.16.2.tgz#48eb6e4d1f1fb08c35f032403628de8454b7fc0f"
-  integrity sha512-JdMoe+r4CaDdPmefbHXWXnZeoCGNfdhC214xnPZkfONQGNQWoOzmuiOcsCn3hTz34wSVFOorisHQ6XhirSmPmQ==
+"@solana/web3.js@^0.16.3":
+  version "0.16.3"
+  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.16.3.tgz#2cb063596a9f9049be0142e1ca1fc49ed7413f24"
+  integrity sha512-FhwWvNUKXixqzhLe8iB39teQNJSDc/30CJfyMAgHUk5dHNDjkcHhML6EHD6FPmsWmILlZ2NjxSXLUQa+rLBXng==
   dependencies:
     "@babel/runtime" "^7.3.1"
     bn.js "^4.11.8"
@@ -220,6 +220,7 @@
     jayson "^3.0.1"
     mz "^2.7.0"
     node-fetch "^2.2.0"
+    npm-run-all "^4.1.5"
     rpc-websockets "^4.3.3"
     superstruct "^0.6.0"
     tweetnacl "^1.0.0"
