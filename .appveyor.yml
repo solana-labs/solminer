@@ -19,8 +19,7 @@ branches:
 install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - set PATH=%APPDATA%\npm;%PATH%
-  - npm install
-  - npm update
+  - yarn
 
 test_script:
   - node --version

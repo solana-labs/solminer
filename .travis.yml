@@ -31,8 +31,7 @@ branches:
   - /^v\d+\.\d+\.\d+/
 
 install:
-- npm install
-- npm update
+- yarn
 
 script:
 - npm run lint
