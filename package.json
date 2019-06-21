@@ -8,12 +8,14 @@
   "scripts": {
     "electron-forge:make": "electron-forge make",
     "electron-forge:package": "electron-forge package",
+    "electron-forge:publish": "electron-forge publish",
     "eslint": "eslint --cache --color --ext .jsx,.js .",
     "fetch-install-init": "babel-node fetch-solana-install-init.js",
     "lint": "npm-run-all --serial pretty eslint",
     "make": "run-s fetch-install-init electron-forge:make",
     "package": "run-s fetch-install-init electron-forge:package",
     "pretty": "prettier --write **/*.jsx **/*.js *.js .*.js",
+    "publish": "run-s fetch-install-init electron-forge:publish",
     "start": "electron-forge start"
   },
   "keywords": [],
