@@ -1,3 +1,8 @@
+const os = require('os');
+
+const dotexe = os.type() === 'Windows_NT' ? '.exe' : '';
+const solanaInstallInit = `solana-install-init${dotexe}`;
+
 module.exports = {
   make_targets: {
     win32: ['squirrel'],
@@ -7,6 +12,7 @@ module.exports = {
   electronPackagerConfig: {
     packageManager: 'yarn',
     icon: 'src/images/icon/solminer',
+    extraResource: solanaInstallInit,
   },
   electronWinstallerConfig: {
     name: 'solminer',

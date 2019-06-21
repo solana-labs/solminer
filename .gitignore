@@ -3,3 +3,5 @@ out
 .eslintcache
 .DS_Store
 yarn-error.log
+solana-install-init
+solana-install-init.exe
