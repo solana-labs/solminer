@@ -3,11 +3,14 @@ import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer';
 import {enableLiveReload} from 'electron-compile';
-
-/*
 import updateElectronApp from 'update-electron-app';
-updateElectronApp();
-*/
+
+
+try {
+  updateElectronApp();
+} catch (err) {
+  console.error(`Unable to enable updates: ${err}`);
+}
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
