@@ -5,6 +5,10 @@ environment:
   nodejs_version: "lts"
   GITHUB_TOKEN:
     secure: vRv9dttH4O8vr09RzhUdKxjM0v69auQc/oXG4/V9O6p+gr09D69Ochoa1pa/2+/I
+  SOLANA_PDX_DECRYPT_SECRET:
+    secure: 5x9gAXBjHtHxzDjNSHPgHZXO2yYb9SopLO/BqnUODekgS/efcn/gN/76h2wfYjw2
+  SOLANA_PDX_PASSWORD:
+    secure: OVwWnCOP2frUj7jsgSg6GBUIhByMAQ2RZC6yW0di96A=
 
 cache:
   - '%APPDATA%\npm-cache'
@@ -19,6 +23,8 @@ branches:
 install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - set PATH=%APPDATA%\npm;%PATH%
+  - ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
+  - IF %APPVEYOR_REPO_TAG% EQU true appveyor-tools\secure-file -decrypt cert\solana.pfx.enc -secret %SOLANA_PDX_DECRYPT_SECRET%
   - yarn
 
 test_script:

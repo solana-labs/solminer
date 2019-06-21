@@ -1,7 +1,24 @@
 const os = require('os');
+const path = require('path');
+const process = require('process');
+const fs = require('fs');
 
 const dotexe = os.type() === 'Windows_NT' ? '.exe' : '';
 const solanaInstallInit = `solana-install-init${dotexe}`;
+
+const electronWinstallerConfig = {
+  name: 'solminer',
+};
+{
+  const certificateFile = path.join(__dirname, 'cert', 'solana.pfx');
+  const certificatePassword = process.env.SOLANA_PDX_PASSWORD;
+  if (fs.existsSync(certificateFile) && typeof certificateFile === 'string') {
+    electronWinstallerConfig.certificatePassword = certificatePassword;
+    electronWinstallerConfig.certificateFile = certificateFile;
+    // eslint-disable-next-line no-console
+    console.log(`Will sign windows installer with ${certificateFile}`);
+  }
+}
 
 module.exports = {
   make_targets: {
@@ -14,9 +31,7 @@ module.exports = {
     icon: 'src/images/icon/solminer',
     extraResource: solanaInstallInit,
   },
-  electronWinstallerConfig: {
-    name: 'solminer',
-  },
+  electronWinstallerConfig,
   electronInstallerDMG: {
     icon: 'src/images/icon/solminer.icns',
   },
