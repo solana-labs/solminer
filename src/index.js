@@ -18,10 +18,11 @@ const isDevMode = process.execPath.match(/[\\/]electron/);
 if (isDevMode) enableLiveReload({strategy: 'react-hmr'});
 
 const createWindow = async () => {
+  const devModeExtra = isDevMode ? 500 : 0;
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 500,
-    height: 200,
+    width: 500 + devModeExtra,
+    height: 200 + devModeExtra,
   });
 
   // and load the index.html of the app.
