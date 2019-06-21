@@ -6,14 +6,15 @@
   "repository": "solana-labs/solminer",
   "main": "src/index.js",
   "scripts": {
-    "fetch-install-init": "babel-node fetch-solana-install-init.js",
-    "start": "electron-forge start",
-    "package": "run-s fetch-install-init electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
+    "electron-forge:make": "electron-forge make",
+    "electron-forge:package": "run-s fetch-install-init electron-forge package",
     "eslint": "eslint --cache --color --ext .jsx,.js .",
+    "fetch-install-init": "babel-node fetch-solana-install-init.js",
     "lint": "npm-run-all --serial pretty eslint",
-    "pretty": "prettier --write **/*.jsx **/*.js *.js .*.js"
+    "make": "run-s fetch-install-init electron-forge:make",
+    "package": "run-s fetch-install-init electron-forge:package",
+    "pretty": "prettier --write **/*.jsx **/*.js *.js .*.js",
+    "start": "electron-forge start"
   },
   "keywords": [],
   "author": "Solana Maintainers <maintainers@solana.com>",
