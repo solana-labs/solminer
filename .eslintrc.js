@@ -8,5 +8,6 @@ module.exports = {
     'object-curly-spacing': ['error', 'never'],
     'import/prefer-default-export': 0,
     'react/prefer-stateless-function': 0,
+    'arrow-parens': ['error', 'as-needed'],
   },
 };
