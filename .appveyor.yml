@@ -10,11 +10,6 @@ environment:
   SOLANA_PDX_PASSWORD:
     secure: OVwWnCOP2frUj7jsgSg6GBUIhByMAQ2RZC6yW0di96A=
 
-cache:
-  - '%APPDATA%\npm-cache'
-  - '%USERPROFILE%\.electron'
-  - node_modules
-
 branches:
   only:
   - master
