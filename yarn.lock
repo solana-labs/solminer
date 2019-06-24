@@ -4874,7 +4874,7 @@ get-installed-path@^2.0.3:
   dependencies:
     global-modules "1.0.0"
 
-get-options@^1.1.1:
+get-options@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/get-options/-/get-options-1.2.0.tgz#8b60a6506fbf03301127ef6c2104bf7b4690cd0e"
   integrity sha512-nxIq5hGry1j9OEzJ0sbvN/A+mO9U0l2BFMeGdsOPl5DPvP51I7mBFN0PMsbM0TDvIDV2mEUPpJqn0Jt/hq05lg==
@@ -5471,7 +5471,7 @@ image-size@^0.7.4:
   resolved "https://registry.yarnpkg.com/image-size/-/image-size-0.7.4.tgz#092c1e541a93511917bfc957a1fc7add21c72e87"
   integrity sha512-GqPgxs+VkOr12aWwjSkyRzf5atzObWpFtiRuDgxCl2I/SDpZOKZFRD3iIAeAN6/usmn8SeLWRt7a8JRYK0Whbw==
 
-immutable@^4.0.0-rc.12, immutable@^4.0.0-rc.9:
+immutable@^4.0.0-rc.12:
   version "4.0.0-rc.12"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.0.0-rc.12.tgz#ca59a7e4c19ae8d9bf74a97bdf0f6e2f2a5d0217"
   integrity sha512-0M2XxkZLx/mi3t8NVwIm1g8nHoEmM9p9UBl/G9k4+hm0kBgOVdMV/B3CY5dQ8qG8qc80NN4gDV4HQv6FTJ5q7A==
@@ -6123,13 +6123,13 @@ java-properties@^1.0.0:
   resolved "https://registry.yarnpkg.com/java-properties/-/java-properties-1.0.1.tgz#ea0b5986c0894d73cf2a44de8bd216c459a07a94"
   integrity sha512-HbTaaXlIHoDVNXjmp4flOBWOfYBkrVN8dD1tp4m+95M/ADSDW/BxWbiwyVIhw/2+5d0cof4PHZCbE7+S1ukTQw==
 
-javascript-terminal@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/javascript-terminal/-/javascript-terminal-1.0.2.tgz#e4739396438d663f3401b0a667c4b0231fd16fe5"
-  integrity sha512-9HawKcE52u7CjLqZjD8dJFdxfxvarIksPB1MY1BcY8pa/Jq9c/bgB0RDwEjKMnF82N3Z+LR9N9FmAKpoz/81FQ==
+javascript-terminal@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/javascript-terminal/-/javascript-terminal-1.0.3.tgz#b0cbdfaa274b284ac65d8593faa2ed30a07521b0"
+  integrity sha512-laR/YP0ehnBvrkGnT7eQWs4Cc7tGVImsnXTwQna46cDX6PBfzzZxKgJs1xx4xgBKbO9QhON9WWuH2ICqu4x4HA==
   dependencies:
-    get-options "^1.1.1"
-    immutable "^4.0.0-rc.9"
+    get-options "^1.2.0"
+    immutable "^4.0.0-rc.12"
     minimatch "^3.0.4"
     minimatch-capture "^1.1.0"
 
