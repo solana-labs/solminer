@@ -7,6 +7,9 @@ import updateElectronApp from 'update-electron-app';
 import path from 'path';
 import log from 'electron-log';
 
+// eslint-disable-next-line global-require
+if (require('electron-squirrel-startup')) app.quit();
+
 // Adjust app name when in dev mode (don't want 'Electron' as the app name)
 app.setName('solminer');
 app.setPath('userData', path.join(app.getPath('appData'), app.getName()));
