@@ -3,9 +3,9 @@ import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer';
 import {enableLiveReload} from 'electron-compile';
-import updateElectronApp from 'update-electron-app';
 import path from 'path';
 import log from 'electron-log';
+import './updater';
 
 // eslint-disable-next-line global-require
 if (require('electron-squirrel-startup')) app.quit();
@@ -14,14 +14,6 @@ if (require('electron-squirrel-startup')) app.quit();
 app.setName('solminer');
 app.setPath('userData', path.join(app.getPath('appData'), app.getName()));
 log.info('userData:', app.getPath('userData'));
-
-try {
-  updateElectronApp({
-    logger: log,
-  });
-} catch (err) {
-  log.error(`Unable to enable updates: ${err}`);
-}
 
 const isDevMode = process.execPath.match(/[\\/]electron/);
 if (isDevMode) enableLiveReload({strategy: 'react-hmr'});
