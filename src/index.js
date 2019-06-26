@@ -23,7 +23,7 @@ let mainWindow;
 app.on('ready', async () => {
   const devModeExtra = isDevMode ? 500 : 0;
   mainWindow = new BrowserWindow({
-    width: 500 + devModeExtra,
+    width: 700 + devModeExtra,
     height: 500 + devModeExtra,
   });
 
