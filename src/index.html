@@ -11,6 +11,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {AppContainer} from 'react-hot-loader';
+import pkg from '../package';
+
+window.document.title = `${pkg.name} ${pkg.version}`;
 
 const render = () => {
   const App = require('./app').default;
