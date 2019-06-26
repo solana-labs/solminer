@@ -3,7 +3,7 @@
   "productName": "solminer",
   "version": "0.0.0-development",
   "description": "Solana Replicator Miner",
-  "repository": "solana-labs/solminer",
+  "repository": "https://github.com/solana-labs/solminer",
   "main": "src/index.js",
   "scripts": {
     "electron-forge:make": "electron-forge make",
