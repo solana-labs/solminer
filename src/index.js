@@ -16,7 +16,9 @@ app.setPath('userData', path.join(app.getPath('appData'), app.getName()));
 log.info('userData:', app.getPath('userData'));
 
 try {
-  updateElectronApp();
+  updateElectronApp({
+    logger: log,
+  });
 } catch (err) {
   log.error(`Unable to enable updates: ${err}`);
 }
