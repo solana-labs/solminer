@@ -1,4 +1,3 @@
-/* eslint no-console: "off" */
 import React from 'react';
 import {Connection} from '@solana/web3.js';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,6 +7,8 @@ import Container from '@material-ui/core/Container';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import log from 'electron-log';
+
 import {url} from './url';
 
 const styles = theme => ({
@@ -32,7 +33,7 @@ const styles = theme => ({
 });
 
 const connection = new Connection(url);
-console.log('connection:', url);
+log.info('connection:', url);
 
 class App extends React.Component {
   constructor(props) {
@@ -58,7 +59,7 @@ class App extends React.Component {
       const totalSupply = await connection.getTotalSupply();
       this.setState({transactionCount, totalSupply});
     } catch (err) {
-      console.log('updateTransactionCount failed', err);
+      log.error('updateTransactionCount failed', err);
     }
   }
 
