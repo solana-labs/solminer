@@ -39,7 +39,7 @@
     "react-dom": "^16.8.6",
     "react-hot-loader": "^4.11.1",
     "react-terminal-component": "^1.4.1",
-    "update-electron-app": "^1.4.2"
+    "update-electron-app": "solana-labs/update-electron-app#nagUser"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^8.0.0",

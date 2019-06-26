@@ -5,6 +5,7 @@ import log from 'electron-log';
 try {
   updateElectronApp({
     logger: log,
+    nagUser: false,
   });
 } catch (err) {
   log.error(`Unable to enable updates: ${err}`);
@@ -15,4 +16,3 @@ autoUpdater.on('update-downloaded', (...args) => {
   log('update-downloaded:', args);
   autoUpdater.quitAndInstall();
 });
-autoUpdater.removeAllListeners('update-downloaded');
