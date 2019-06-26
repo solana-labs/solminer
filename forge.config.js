@@ -23,7 +23,7 @@ const electronWinstallerConfig = {
 module.exports = {
   make_targets: {
     win32: ['squirrel'],
-    darwin: ['dmg'],
+    darwin: ['zip', 'dmg'],
     linux: ['deb', 'rpm'],
   },
   electronPackagerConfig: {
