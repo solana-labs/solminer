@@ -11585,7 +11585,8 @@ unzip-response@^2.0.1:
 
 update-electron-app@solana-labs/update-electron-app#nagUser:
   version "0.0.0-development"
-  resolved "https://codeload.github.com/solana-labs/update-electron-app/tar.gz/8704a66113a8584274c72c7ac142c7482bf6772a"
+  uid b655aef44c5ca6e368380dbd03d27a911c0a9871
+  resolved "https://codeload.github.com/solana-labs/update-electron-app/tar.gz/b655aef44c5ca6e368380dbd03d27a911c0a9871"
   dependencies:
     electron-is-dev "^0.3.0"
     github-url-to-object "^4.0.4"
