@@ -6,7 +6,8 @@ import fetch from 'node-fetch';
 import got from 'got';
 import fs from 'fs';
 
-const channel = 'github-release';
+//const channel = 'github-release';
+const channel = 'v0.16.0';
 
 // Use 'latest', or "id" field of the desired release from
 // https://api.github.com/repos/solana-labs/solana/releases
