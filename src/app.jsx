@@ -45,34 +45,85 @@ const styles = theme => ({
   },
 });
 
-const connection = new Connection(url);
-log.info('connection:', url);
-
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.terminalHeight = 25;
+
     this.state = {
       transactionCount: 0,
       totalMined: 0,
       totalSupply: 0,
     };
+    this.connection = new Connection(url);
+    log.info('connection:', url);
+
+    this.clearTerminal();
+    this.addTerminalText(`Cluster entrypoint: ${url}...`);
   }
 
   componentDidMount() {
-    this.id = setInterval(() => this.updateTransactionCount(), 1000);
+    this.id = setInterval(() => this.updateClusterStats(), 1000);
   }
 
   componentWillUnmount() {
     clearInterval(this.id);
   }
 
-  async updateTransactionCount() {
+  trimTerminalOutput() {
+    const count = this.terminalOutputs.count();
+    if (count > this.terminalHeight) {
+      this.terminalOutputs = this.terminalOutputs.splice(
+        0,
+        count - this.terminalHeight,
+      );
+    }
+    this.setState({});
+  }
+
+  addTerminalCommand(command) {
+    this.terminalOutputs = Outputs.addRecord(
+      this.terminalOutputs,
+      OutputFactory.makeHeaderOutput('', command),
+    );
+    this.trimTerminalOutput();
+  }
+
+  addTerminalText(text) {
+    this.terminalOutputs = Outputs.addRecord(
+      this.terminalOutputs,
+      OutputFactory.makeTextOutput(text),
+    );
+    this.trimTerminalOutput();
+  }
+
+  addTerminalError(errorMessage) {
+    this.terminalOutputs = Outputs.addRecord(
+      this.terminalOutputs,
+      OutputFactory.makeErrorOutput({source: 'error', type: errorMessage}),
+    );
+    this.trimTerminalOutput();
+  }
+
+  clearTerminal() {
+    this.terminalOutputs = Outputs.create(
+      new Array(this.terminalHeight).fill(OutputFactory.makeTextOutput(' ')),
+    );
+    this.trimTerminalOutput();
+  }
+
+  async updateClusterStats() {
     try {
-      const transactionCount = await connection.getTransactionCount();
-      const totalSupply = await connection.getTotalSupply();
-      this.setState({transactionCount, totalSupply});
+      const transactionCount = await this.connection.getTransactionCount();
+      const totalSupply = await this.connection.getTotalSupply();
+
+      this.setState({
+        transactionCount,
+        totalSupply,
+      });
     } catch (err) {
-      log.error('updateTransactionCount failed', err);
+      log.error('updateClusterStats failed', err);
+      this.addTerminalError(`updateClusterStats failed: ${err.message}`);
     }
   }
 
@@ -84,29 +135,9 @@ class App extends React.Component {
       2,
     );
 
-    const defaultState = EmulatorState.createEmpty();
-    const defaultOutputs = defaultState.getOutputs();
-
-    let newOutputs = Outputs.addRecord(
-      defaultOutputs,
-      OutputFactory.makeTextOutput('...'),
+    const emulatorState = EmulatorState.createEmpty().setOutputs(
+      this.terminalOutputs,
     );
-    let emulatorState = defaultState.setOutputs(newOutputs);
-
-    for (let i = 0; i <= 1000; i += 1) {
-      newOutputs = Outputs.addRecord(
-        newOutputs,
-        OutputFactory.makeTextOutput(
-          `${i}: this is a replicator log message...`,
-        ),
-      );
-    }
-    log.info(newOutputs.count());
-    newOutputs = newOutputs.splice(0, newOutputs.count() - 25);
-    log.info(newOutputs.count());
-
-    emulatorState = emulatorState.setOutputs(newOutputs);
-    // newOutputs = emulatorState.getOutputs();
 
     return (
       <div className={classes.root}>
@@ -132,8 +163,9 @@ class App extends React.Component {
               </Typography>
               <div className={classes.storageSlider}>
                 <Slider
+                  disabled
                   step={10}
-                  defaultValue={50}
+                  defaultValue={20}
                   className={classes.publicKeyTextField}
                   valueLabelDisplay="on"
                   min={10}
