@@ -13,6 +13,6 @@ try {
 
 // Replace the updateElectronApp handler with our own that updates immediately.
 autoUpdater.on('update-downloaded', (...args) => {
-  log('update-downloaded:', args);
+  log.info('update-downloaded:', args);
   autoUpdater.quitAndInstall();
 });
