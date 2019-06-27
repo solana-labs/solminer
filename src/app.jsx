@@ -63,7 +63,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.id = setInterval(() => this.updateClusterStats(), 1000);
+    this.id = setInterval(() => this.updateClusterStats(), 2000);
   }
 
   componentWillUnmount() {
@@ -112,10 +112,18 @@ class App extends React.Component {
     this.trimTerminalOutput();
   }
 
+  clusterRestart() {
+    this.addTerminalText(`Cluster restart detected at ${new Date()}`);
+  }
+
   async updateClusterStats() {
     try {
       const transactionCount = await this.connection.getTransactionCount();
       const totalSupply = await this.connection.getTotalSupply();
+
+      if (transactionCount < this.state.transactionCount) {
+        this.clusterRestart();
+      }
 
       this.setState({
         transactionCount,
