@@ -8,6 +8,12 @@ import fs from 'fs';
 
 const channel = 'github-release';
 
+// Use 'latest', or "id" field of the desired release from
+// https://api.github.com/repos/solana-labs/solana/releases
+//
+// TODO: Swap "id" for "tag_name" and locate the "id" programmatically...
+const githubReleaseId = '18132444'; // v0.16.0
+
 async function download(assetName, dest) {
   if (fs.existsSync(dest)) {
     console.log(`${dest} already exists`);
@@ -17,12 +23,19 @@ async function download(assetName, dest) {
   let downloadUrl;
   if (channel === 'github-release') {
     const releaseUrl =
-      'https://api.github.com/repos/solana-labs/solana/releases/latest';
+      `https://api.github.com/repos/solana-labs/solana/releases/${githubReleaseId}`;
     console.log(`Fetching ${releaseUrl}...`);
     const response = await fetch(releaseUrl);
-    const latestRelease = await response.json();
+    const releaseInfo = await response.json();
 
-    const asset = latestRelease.assets.find(a => a.name === assetName);
+    if (typeof releaseInfo !== 'object' || typeof releaseInfo.assets !== 'object') {
+      console.error('response:', response);
+      console.error('releaseInfo:', releaseInfo);
+      throw new Error(`Unable to locate a release asset named ${assetName}`);
+    }
+    console.log(`Found ${releaseInfo.tag_name}`);
+
+    const asset = releaseInfo.assets.find(a => a.name === assetName);
     if (!asset) {
       throw new Error(`Unable to locate a release asset named ${assetName}`);
     }
