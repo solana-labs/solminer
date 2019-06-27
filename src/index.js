@@ -21,10 +21,10 @@ if (isDevMode) enableLiveReload({strategy: 'react-hmr'});
 let mainWindow;
 
 app.on('ready', async () => {
-  const devModeExtra = isDevMode ? 500 : 0;
+  const devModeExtra = isDevMode ? 200 : 0;
   mainWindow = new BrowserWindow({
-    width: 700 + devModeExtra,
-    height: 500 + devModeExtra,
+    width: 1000 + devModeExtra,
+    height: 790,
   });
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);

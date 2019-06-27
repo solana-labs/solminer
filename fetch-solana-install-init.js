@@ -6,8 +6,7 @@ import fetch from 'node-fetch';
 import got from 'got';
 import fs from 'fs';
 
-const channel = 'edge';
-// const channel = 'github-release';
+const channel = 'github-release';
 
 async function download(assetName, dest) {
   if (fs.existsSync(dest)) {
