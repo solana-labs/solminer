@@ -2,7 +2,6 @@ import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Slider from '@material-ui/lab/Slider';
@@ -23,16 +22,14 @@ const styles = theme => ({
     minHeight: '100vh',
   },
   main: {
-    margin: theme.spacing(2),
+    marginTop: theme.spacing(2),
   },
   summary: {
     marginTop: theme.spacing(2),
-  },
-  paper: {
-    padding: theme.spacing(2),
     textAlign: 'center',
   },
   publicKeyTextField: {
+    marginTop: theme.spacing(0),
     marginLeft: theme.spacing(2),
     width: 500,
   },
@@ -41,6 +38,10 @@ const styles = theme => ({
   },
   progressBar: {
     marginTop: theme.spacing(1),
+  },
+  footer: {
+    marginTop: 'auto',
+    backgroundColor: 'white',
   },
 });
 
@@ -51,9 +52,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      transactionCount: '?',
+      transactionCount: 0,
       totalMined: 0,
-      totalSupply: '?',
+      totalSupply: 0,
     };
   }
 
@@ -95,7 +96,7 @@ class App extends React.Component {
     for (let i = 0; i <= 1000; i += 1) {
       newOutputs = Outputs.addRecord(
         newOutputs,
-        OutputFactory.makeTextOutput(`${i}: Coming soon...`),
+        OutputFactory.makeTextOutput(`${i}: this is a replicator log message...`),
       );
     }
     log.info(newOutputs.count());
@@ -110,9 +111,13 @@ class App extends React.Component {
         <CssBaseline />
         <Container className={classes.main}>
           <Grid container spacing={0}>
-            <Grid justify="center" item xs={10} sm={5}>
+            <Grid
+              item
+              style={{display: 'flex', alignItems: 'center'}}
+              xs={10}
+              sm={5}
+            >
               <Typography variant="h2">
-                <br />
                 <span role="img" aria-label="pick">
                   ⛏️
                 </span>{' '}
@@ -142,42 +147,38 @@ class App extends React.Component {
                 placeholder="Account Public Key"
                 className={classes.publicKeyTextField}
                 margin="normal"
-                helperText="Current Account Balance: 12345 lamports"
+                helperText="Account Balance: 12345 lamports"
               />
             </Grid>
           </Grid>
         </Container>
-        <Container className={classes.summary}>
-          <Grid container spacing={1}>
-            <Grid item xs>
-              <Paper className={classes.paper}>
-                <Typography variant="body2">
+        <footer className={classes.footer}>
+          <Container className={classes.summary}>
+            <Grid container spacing={1}>
+              <Grid item xs>
+                <Typography variant="caption" noWrap>
                   Lamports mined: {this.state.totalMined}
                 </Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs>
-              <Paper className={classes.paper}>
-                <Typography variant="body2">
+              </Grid>
+              <Grid item xs>
+                <Typography variant="caption" noWrap>
                   Transaction count: {this.state.transactionCount}
                 </Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs>
-              <Paper className={classes.paper}>
-                <Typography variant="body2">
+              </Grid>
+              <Grid item xs>
+                <Typography variant="caption" noWrap>
                   Total supply: {totalSupplySOL} SOL
                 </Typography>
-              </Paper>
+              </Grid>
             </Grid>
-          </Grid>
-        </Container>
-        <LinearProgress className={classes.progressBar} />
-        <ReactTerminal
-          theme={{...ReactThemes.default, height: '50'}}
-          emulatorState={emulatorState}
-          acceptInput={false}
-        />
+          </Container>
+          <LinearProgress className={classes.progressBar} />
+          <ReactTerminal
+            theme={{...ReactThemes.default, height: '50'}}
+            emulatorState={emulatorState}
+            acceptInput={false}
+          />
+        </footer>
       </div>
     );
   }

@@ -24,7 +24,8 @@ app.on('ready', async () => {
   const devModeExtra = isDevMode ? 200 : 0;
   mainWindow = new BrowserWindow({
     width: 1000 + devModeExtra,
-    height: 790,
+    height: 750,
+    resizable: isDevMode,
   });
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);
