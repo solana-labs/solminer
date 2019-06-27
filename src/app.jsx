@@ -96,7 +96,9 @@ class App extends React.Component {
     for (let i = 0; i <= 1000; i += 1) {
       newOutputs = Outputs.addRecord(
         newOutputs,
-        OutputFactory.makeTextOutput(`${i}: this is a replicator log message...`),
+        OutputFactory.makeTextOutput(
+          `${i}: this is a replicator log message...`,
+        ),
       );
     }
     log.info(newOutputs.count());

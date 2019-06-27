@@ -6,7 +6,7 @@ import fetch from 'node-fetch';
 import got from 'got';
 import fs from 'fs';
 
-//const channel = 'github-release';
+// const channel = 'github-release';
 const channel = 'v0.16.0';
 
 // Use 'latest', or "id" field of the desired release from
@@ -23,13 +23,15 @@ async function download(assetName, dest) {
 
   let downloadUrl;
   if (channel === 'github-release') {
-    const releaseUrl =
-      `https://api.github.com/repos/solana-labs/solana/releases/${githubReleaseId}`;
+    const releaseUrl = `https://api.github.com/repos/solana-labs/solana/releases/${githubReleaseId}`;
     console.log(`Fetching ${releaseUrl}...`);
     const response = await fetch(releaseUrl);
     const releaseInfo = await response.json();
 
-    if (typeof releaseInfo !== 'object' || typeof releaseInfo.assets !== 'object') {
+    if (
+      typeof releaseInfo !== 'object' ||
+      typeof releaseInfo.assets !== 'object'
+    ) {
       console.error('response:', response);
       console.error('releaseInfo:', releaseInfo);
       throw new Error(`Unable to locate a release asset named ${assetName}`);
