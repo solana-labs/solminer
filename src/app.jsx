@@ -122,6 +122,7 @@ class App extends React.Component {
       const totalSupply = await this.connection.getTotalSupply();
 
       if (transactionCount < this.state.transactionCount) {
+        this.addTerminalText(`Transaction count decreased from ${this.state.transactionCount} to ${transactionCount}`);
         this.clusterRestart();
       }
 
