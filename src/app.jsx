@@ -14,6 +14,7 @@ import {ReactThemes, ReactTerminal} from 'react-terminal-component';
 import {EmulatorState, OutputFactory, Outputs} from 'javascript-terminal';
 
 import {url} from './url';
+import {Replicator} from './replicator';
 
 const styles = theme => ({
   root: {
@@ -60,6 +61,9 @@ class App extends React.Component {
 
     this.clearTerminal();
     this.addTerminalText(`Cluster entrypoint: ${url}...`);
+
+    this.replicator = new Replicator(this.connection, this);
+    this.replicator.start();
   }
 
   componentDidMount() {
@@ -90,18 +94,22 @@ class App extends React.Component {
   }
 
   addTerminalText(text) {
-    this.terminalOutputs = Outputs.addRecord(
-      this.terminalOutputs,
-      OutputFactory.makeTextOutput(text),
-    );
+    text.split('\n').forEach(line => {
+      this.terminalOutputs = Outputs.addRecord(
+        this.terminalOutputs,
+        OutputFactory.makeTextOutput(line),
+      );
+    });
     this.trimTerminalOutput();
   }
 
   addTerminalError(errorMessage) {
-    this.terminalOutputs = Outputs.addRecord(
-      this.terminalOutputs,
-      OutputFactory.makeErrorOutput({source: 'error', type: errorMessage}),
-    );
+    errorMessage.split('\n').forEach(line => {
+      this.terminalOutputs = Outputs.addRecord(
+        this.terminalOutputs,
+        OutputFactory.makeErrorOutput({source: 'error', type: line}),
+      );
+    });
     this.trimTerminalOutput();
   }
 
@@ -114,6 +122,7 @@ class App extends React.Component {
 
   clusterRestart() {
     this.addTerminalText(`Cluster restart detected at ${new Date()}`);
+    this.replicator.restart();
   }
 
   async updateClusterStats() {
@@ -121,8 +130,10 @@ class App extends React.Component {
       const transactionCount = await this.connection.getTransactionCount();
       const totalSupply = await this.connection.getTotalSupply();
 
-      if (transactionCount < this.state.transactionCount) {
-        this.addTerminalText(`Transaction count decreased from ${this.state.transactionCount} to ${transactionCount}`);
+      if (transactionCount < this.state.transactionCount / 2) {
+        this.addTerminalText(
+          `Transaction count decreased from ${this.state.transactionCount} to ${transactionCount}`,
+        );
         this.clusterRestart();
       }
 
