@@ -29,6 +29,7 @@
     "@material-ui/lab": "^4.0.0-alpha.18",
     "@solana/web3.js": "^0.16.10",
     "electron-compile": "^6.4.4",
+    "electron-store": "^4.0.0",
     "electron-devtools-installer": "^2.1.0",
     "electron-log": "^3.0.6",
     "electron-squirrel-startup": "^1.0.0",
