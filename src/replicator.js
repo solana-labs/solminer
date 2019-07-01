@@ -24,7 +24,7 @@ export class Replicator {
       'replicator-keypair.json',
     );
     this.storageKeypairFile = path.join(userDataPath, 'storage-keypair.json');
-    this.replicatorKeypairDir = path.join(userDataPath, 'ledger');
+    this.replicatorLedgerDir = path.join(userDataPath, 'ledger');
 
     this.solanaInstallConfig = path.join(userDataPath, 'config.yml');
     this.solanaInstallDataDir = path.join(userDataPath, 'install');
@@ -61,13 +61,14 @@ export class Replicator {
    */
   async cmd(command, args) {
     this.terminalOutput.addTerminalCommand(`${command} ${args.join(' ')}`);
-    const child = spawn(command, args);
+    const env = Object.assign({}, {RUST_LOG: 'solana=info'}, process.env);
+    const child = spawn(command, args, {env});
 
     child.stdout.on('data', data =>
       this.terminalOutput.addTerminalText(data.toString()),
     );
     child.stderr.on('data', data =>
-      this.terminalOutput.addTerminalError(data.toString()),
+      this.terminalOutput.addTerminalText(data.toString()),
     );
     return child;
   }
