@@ -1,17 +1,21 @@
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Slider from '@material-ui/lab/Slider';
+import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import log from 'electron-log';
 import {Connection} from '@solana/web3.js';
-import {withStyles} from '@material-ui/core/styles';
-import {ReactThemes, ReactTerminal} from 'react-terminal-component';
 import {EmulatorState, OutputFactory, Outputs} from 'javascript-terminal';
+import {ReactThemes, ReactTerminal} from 'react-terminal-component';
+import {withStyles} from '@material-ui/core/styles';
+import Store from 'electron-store';
 
 import {url} from './url';
 import {Replicator} from './replicator';
@@ -38,11 +42,11 @@ const styles = theme => ({
     marginTop: theme.spacing(5),
   },
   progressBar: {
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(2),
   },
   footer: {
-    marginTop: 'auto',
-    backgroundColor: 'white',
+    marginTop: theme.spacing(1),
+    backgroundColor: 'lightgray',
   },
 });
 
@@ -51,10 +55,19 @@ class App extends React.Component {
     super(props);
     this.terminalHeight = 25;
 
+    const storeSchema = {
+      enabled: {
+        type: 'boolean',
+        default: false,
+      },
+    };
+    this.store = new Store({schema: storeSchema});
+
     this.state = {
       transactionCount: 0,
       totalMined: 0,
       totalSupply: 0,
+      enabled: this.store.get('enabled'),
     };
     this.connection = new Connection(url);
     log.info('connection:', url);
@@ -63,7 +76,11 @@ class App extends React.Component {
     this.addTerminalText(`Cluster entrypoint: ${url}...`);
 
     this.replicator = new Replicator(this.connection, this);
-    this.replicator.start();
+    if (this.state.enabled) {
+      this.replicator.start();
+    } else {
+      this.addTerminalText('Mining disabled');
+    }
   }
 
   componentDidMount() {
@@ -150,6 +167,17 @@ class App extends React.Component {
     }
   }
 
+  onEnabledSwitch = event => {
+    const enabled = event.target.checked;
+    this.store.set('enabled', enabled);
+    this.setState({enabled});
+    if (enabled) {
+      this.replicator.start();
+    } else {
+      this.replicator.stop();
+    }
+  };
+
   render() {
     const {classes} = this.props;
 
@@ -181,6 +209,19 @@ class App extends React.Component {
               </Typography>
             </Grid>
             <Grid item xs={10} sm={5}>
+              <FormGroup row>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={this.state.enabled}
+                      onChange={this.onEnabledSwitch}
+                      color="primary"
+                    />
+                  }
+                  label="Enable"
+                />
+              </FormGroup>
+              <p />
               <Typography variant="subtitle1" gutterBottom>
                 Gigabytes of ledger to store:
               </Typography>
@@ -229,7 +270,11 @@ class App extends React.Component {
               </Grid>
             </Grid>
           </Container>
-          <LinearProgress className={classes.progressBar} />
+          <LinearProgress
+            variant={this.state.enabled ? 'indeterminate' : 'determinate'}
+            value={100}
+            className={classes.progressBar}
+          />
           <ReactTerminal
             theme={{...ReactThemes.default, height: '50'}}
             emulatorState={emulatorState}

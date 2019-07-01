@@ -11,6 +11,8 @@ export class Replicator {
     this.connection = connection;
     this.terminalOutput = terminalOutput;
     this.running = false;
+    this.mainPromise = Promise.resolve();
+    this.cmdCancel = () => undefined;
 
     const userDataPath = electron.remote.app.getPath('userData');
     this.solanaInstallBinDir = path.join(
@@ -30,29 +32,31 @@ export class Replicator {
     this.solanaInstallDataDir = path.join(userDataPath, 'install');
   }
 
-  start() {
+  async start() {
     if (this.running) {
       log.warn('Replicator already running, ignoring start()');
       return;
     }
+    await this.mainPromise;
     this.running = true;
-    this.main();
+    this.mainPromise = this.main();
   }
 
-  stop() {
+  async stop() {
     if (!this.running) {
       return;
     }
-    this.terminalOutput.addTerminalText('^C');
     this.running = false;
-    // TODO: signal main to exit...
+    this.terminalOutput.addTerminalText('^C');
+    this.cmdCancel();
+    await this.mainPromise;
   }
 
-  restart() {
+  async restart() {
     if (!this.running) {
       return;
     }
-    this.stop();
+    await this.stop();
     this.start();
   }
 
@@ -63,6 +67,7 @@ export class Replicator {
     this.terminalOutput.addTerminalCommand(`${command} ${args.join(' ')}`);
     const env = Object.assign({}, {RUST_LOG: 'solana=info'}, process.env);
     const child = spawn(command, args, {env});
+    log.info(`pid ${child.pid}`);
 
     child.stdout.on('data', data =>
       this.terminalOutput.addTerminalText(data.toString()),
@@ -70,7 +75,16 @@ export class Replicator {
     child.stderr.on('data', data =>
       this.terminalOutput.addTerminalText(data.toString()),
     );
-    return child;
+    return Promise.race([
+      child,
+      new Promise((_, reject) => {
+        this.cmdCancel = () => {
+          log.info(`cmd cancelled, killing pid ${child.pid}`);
+          child.kill();
+          reject(new Error('User abort'));
+        };
+      }),
+    ]);
   }
 
   /**
@@ -142,5 +156,12 @@ export class Replicator {
     } catch (err) {
       this.terminalOutput.addTerminalError(err.message);
     }
+
+    if (!this.running) {
+      log.info('main: not running anymore');
+      return Promise.resolve();
+    }
+    log.info('main: still running, restarting');
+    return this.main();
   }
 }
