@@ -1,6 +1,12 @@
 module.exports = {
   extends: 'eslint-config-airbnb',
+  parser: 'babel-eslint',
+  parserOptions: {
+    sourceType: 'module',
+    ecmaVersion: 8,
+  },
   rules: {
+    'react/sort-comp': 0,
     'import/extensions': 0,
     'import/no-extraneous-dependencies': 0,
     'import/no-unresolved': [2, {ignore: ['electron']}],
