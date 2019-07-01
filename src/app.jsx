@@ -86,6 +86,7 @@ class App extends React.Component {
   }
 
   addTerminalCommand(command) {
+    log.info('term$ ', command);
     this.terminalOutputs = Outputs.addRecord(
       this.terminalOutputs,
       OutputFactory.makeHeaderOutput('', command),
@@ -95,6 +96,7 @@ class App extends React.Component {
 
   addTerminalText(text) {
     text.split('\n').forEach(line => {
+      log.info('term> ', line);
       this.terminalOutputs = Outputs.addRecord(
         this.terminalOutputs,
         OutputFactory.makeTextOutput(line),
@@ -105,6 +107,7 @@ class App extends React.Component {
 
   addTerminalError(errorMessage) {
     errorMessage.split('\n').forEach(line => {
+      log.info('TERM> ', line);
       this.terminalOutputs = Outputs.addRecord(
         this.terminalOutputs,
         OutputFactory.makeErrorOutput({source: 'error', type: line}),
