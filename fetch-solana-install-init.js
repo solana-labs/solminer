@@ -7,7 +7,8 @@ import got from 'got';
 import fs from 'fs';
 
 // const channel = 'github-release';
-const channel = 'v0.16.0';
+// const channel = 'v0.16.0';
+const channel = 'beta';
 
 // Use 'latest', or "id" field of the desired release from
 // https://api.github.com/repos/solana-labs/solana/releases
