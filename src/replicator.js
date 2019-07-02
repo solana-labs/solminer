@@ -10,12 +10,11 @@ import {solanaInstallInit} from './solana-install-init';
 const airdropAmount = 100000;
 
 export class Replicator {
-  constructor(connection, terminalOutput) {
+  constructor(connection) {
     const userDataPath = electron.remote.app.getPath('userData');
 
     Object.assign(this, {
       connection,
-      terminalOutput,
       running: false,
       mainPromise: Promise.resolve(),
       cmdCancel: () => undefined,
@@ -49,7 +48,7 @@ export class Replicator {
       return;
     }
     this.running = false;
-    this.terminalOutput.addTerminalText('^C');
+    console.warn('^C');
     this.cmdCancel();
     await this.mainPromise;
   }
@@ -107,16 +106,17 @@ export class Replicator {
    * @private
    */
   async cmd(command, args) {
-    this.terminalOutput.addTerminalCommand(`${command} ${args.join(' ')}`);
+    console.log(`$ ${command} ${args.join(' ')}`);
+    log.info(`$ ${command} ${args.join(' ')}`);
     const env = Object.assign({}, {RUST_LOG: 'solana=info'}, process.env);
     const child = spawn(command, args, {env});
     log.info(`pid ${child.pid}`);
 
     child.stdout.on('data', data =>
-      this.terminalOutput.addTerminalText(data.toString()),
+      console.log(data.toString().replace(/\n+$/, '')),
     );
     child.stderr.on('data', data =>
-      this.terminalOutput.addTerminalText(data.toString()),
+      console.log(data.toString().replace(/\n+$/, '')),
     );
     return Promise.race([
       child,
@@ -200,7 +200,7 @@ export class Replicator {
         this.replicatorLedgerDir,
       ]);
     } catch (err) {
-      this.terminalOutput.addTerminalError(err.message);
+      console.error(err.message);
     }
 
     if (!this.running) {

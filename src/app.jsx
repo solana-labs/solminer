@@ -13,21 +13,19 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import log from 'electron-log';
 import {Connection, PublicKey} from '@solana/web3.js';
-import {EmulatorState, OutputFactory, Outputs} from 'javascript-terminal';
-import {ReactThemes, ReactTerminal} from 'react-terminal-component';
 import {withStyles} from '@material-ui/core/styles';
 import Store from 'electron-store';
 import IconButton from '@material-ui/core/IconButton';
 import SaveIcon from '@material-ui/icons/Save';
+import autoscroll from 'autoscroll-react';
+import {Hook, Console, Decode} from 'console-feed';
 
 import {url} from './url';
 import {Replicator} from './replicator';
 
 const styles = theme => ({
   root: {
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '100vh',
+    height: '100%',
   },
   main: {
     marginTop: theme.spacing(2),
@@ -64,6 +62,28 @@ function isValidPublicKey(publicKey) {
   );
 }
 
+class LogConsole extends React.Component {
+  render() {
+    return (
+      <div
+        style={{
+          backgroundColor: '#242424',
+          height: '450px',
+          overflow: 'scroll',
+        }}
+      >
+        <div style={{width: '1000%'}}>
+          <Console logs={this.props.logs} variant="dark" />
+        </div>
+      </div>
+    );
+  }
+}
+LogConsole.propTypes = {
+  logs: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
+
+// eslint-disable-next-line react/no-multi-comp
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -75,6 +95,7 @@ class App extends React.Component {
       transactionCount: 0,
       totalMined: this.store.get('totalMined', 0),
       newMined: 0,
+      logs: [],
       totalSupply: 0,
       enabled: this.store.get('enabled', true),
       unsavedDepositPublicKey: this.depositPublicKey,
@@ -82,21 +103,29 @@ class App extends React.Component {
       unsavedDepositPublicKeySavePrompt: false,
       depositPublicKeyBalance: ' ',
     };
-    this.connection = new Connection(url);
-    log.info('connection:', url);
-
-    this.clearTerminal();
-    this.addTerminalText(`Cluster entrypoint: ${url}...`);
-
-    this.replicator = new Replicator(this.connection, this);
-    if (this.state.enabled) {
-      this.replicator.start();
-    } else {
-      this.addTerminalText('Mining disabled');
-    }
   }
 
   componentDidMount() {
+    Hook(console, newLog => {
+      const logs = [...this.state.logs, Decode(newLog)];
+      const max = 1024;
+      if (logs.length > max) {
+        logs.splice(0, logs.length - max);
+      }
+      this.setState({logs});
+    });
+    this.connection = new Connection(url);
+
+    this.clearTerminal();
+    log.info(`Cluster entrypoint: ${url}...`);
+
+    this.replicator = new Replicator(this.connection);
+    if (this.state.enabled) {
+      this.replicator.start();
+    } else {
+      console.warn('Mining disabled');
+    }
+
     this.updateClusterStats();
     this.id = setInterval(() => this.updateClusterStats(), 10000);
   }
@@ -105,57 +134,12 @@ class App extends React.Component {
     clearInterval(this.id);
   }
 
-  trimTerminalOutput() {
-    const count = this.terminalOutputs.count();
-    if (count > this.terminalHeight) {
-      this.terminalOutputs = this.terminalOutputs.splice(
-        0,
-        count - this.terminalHeight,
-      );
-    }
-    this.setState({});
-  }
-
-  addTerminalCommand(command) {
-    log.info('term$ ', command);
-    this.terminalOutputs = Outputs.addRecord(
-      this.terminalOutputs,
-      OutputFactory.makeHeaderOutput('', command),
-    );
-    this.trimTerminalOutput();
-  }
-
-  addTerminalText(text) {
-    text.split('\n').forEach(line => {
-      log.info('term> ', line);
-      this.terminalOutputs = Outputs.addRecord(
-        this.terminalOutputs,
-        OutputFactory.makeTextOutput(line),
-      );
-    });
-    this.trimTerminalOutput();
-  }
-
-  addTerminalError(errorMessage) {
-    errorMessage.split('\n').forEach(line => {
-      log.info('TERM> ', line);
-      this.terminalOutputs = Outputs.addRecord(
-        this.terminalOutputs,
-        OutputFactory.makeErrorOutput({source: 'error', type: line}),
-      );
-    });
-    this.trimTerminalOutput();
-  }
-
   clearTerminal() {
-    this.terminalOutputs = Outputs.create(
-      new Array(this.terminalHeight).fill(OutputFactory.makeTextOutput(' ')),
-    );
-    this.trimTerminalOutput();
+    this.setState({logs: []});
   }
 
   clusterRestart() {
-    this.addTerminalText(`Cluster restart detected at ${new Date()}`);
+    console.warn(`Cluster restart detected at ${new Date()}`);
     this.replicator.clusterRestart();
     this.setState({
       transactionCount: 0,
@@ -168,7 +152,7 @@ class App extends React.Component {
       const transactionCount = await this.connection.getTransactionCount();
 
       if (transactionCount < this.state.transactionCount / 2) {
-        this.addTerminalText(
+        console.warn(
           `Transaction count decreased from ${this.state.transactionCount} to ${transactionCount}`,
         );
         this.clusterRestart();
@@ -212,8 +196,7 @@ class App extends React.Component {
         depositPublicKeyBalance,
       });
     } catch (err) {
-      log.error('updateClusterStats failed', err);
-      this.addTerminalError(`updateClusterStats failed: ${err.message}`);
+      console.warn('updateClusterStats failed', err);
     }
   }
 
@@ -222,6 +205,7 @@ class App extends React.Component {
     this.store.set('enabled', enabled);
     this.setState({enabled});
     if (enabled) {
+      this.clearTerminal();
       this.replicator.start();
     } else {
       this.replicator.stop();
@@ -277,13 +261,13 @@ class App extends React.Component {
   render() {
     const {classes} = this.props;
 
+    const AutoscrollLogConsole = autoscroll(LogConsole, {
+      isScrolledDownThreshold: 0,
+    });
+
     // eslint-disable-next-line no-restricted-properties
     const totalSupplySOL = (this.state.totalSupply / Math.pow(2, 34)).toFixed(
       2,
-    );
-
-    const emulatorState = EmulatorState.createEmpty().setOutputs(
-      this.terminalOutputs,
     );
 
     return (
@@ -370,7 +354,7 @@ class App extends React.Component {
             </Grid>
           </Grid>
         </Container>
-        <footer className={classes.footer}>
+        <div className={classes.footer}>
           <Container className={classes.summary}>
             <Grid container spacing={1}>
               <Grid item xs>
@@ -400,16 +384,13 @@ class App extends React.Component {
             value={100}
             className={classes.progressBar}
           />
-          <ReactTerminal
-            theme={{...ReactThemes.default, height: '50'}}
-            emulatorState={emulatorState}
-            acceptInput={false}
-          />
-        </footer>
+          <AutoscrollLogConsole logs={this.state.logs} />
+        </div>
       </div>
     );
   }
 }
+
 App.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
