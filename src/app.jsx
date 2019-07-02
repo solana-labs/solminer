@@ -76,7 +76,7 @@ class App extends React.Component {
       totalMined: this.store.get('totalMined', 0),
       newMined: 0,
       totalSupply: 0,
-      enabled: this.store.get('enabled', false),
+      enabled: this.store.get('enabled', true),
       unsavedDepositPublicKey: this.depositPublicKey,
       unsavedDepositPublicKeyValid: isValidPublicKey(this.depositPublicKey),
       unsavedDepositPublicKeySavePrompt: false,
