@@ -63,7 +63,7 @@ export class Replicator {
   }
 
   async adjustedReplicatorBalance() {
-    if (this.replicatorKeypair.publicKey) {
+    if (this.replicatorKeypair !== null) {
       try {
         return Math.max(
           0,
