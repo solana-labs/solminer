@@ -4,6 +4,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Slider from '@material-ui/lab/Slider';
@@ -11,11 +12,13 @@ import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import log from 'electron-log';
-import {Connection} from '@solana/web3.js';
+import {Connection, PublicKey} from '@solana/web3.js';
 import {EmulatorState, OutputFactory, Outputs} from 'javascript-terminal';
 import {ReactThemes, ReactTerminal} from 'react-terminal-component';
 import {withStyles} from '@material-ui/core/styles';
 import Store from 'electron-store';
+import IconButton from '@material-ui/core/IconButton';
+import SaveIcon from '@material-ui/icons/Save';
 
 import {url} from './url';
 import {Replicator} from './replicator';
@@ -38,6 +41,9 @@ const styles = theme => ({
     marginLeft: theme.spacing(2),
     width: 500,
   },
+  iconButton: {
+    padding: 10,
+  },
   storageSlider: {
     marginTop: theme.spacing(5),
   },
@@ -50,24 +56,31 @@ const styles = theme => ({
   },
 });
 
+function isValidPublicKey(publicKey) {
+  return (
+    typeof publicKey === 'string' &&
+    publicKey.length === 44 &&
+    publicKey.match(/^[A-Za-z0-9]+$/)
+  );
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.terminalHeight = 25;
-
-    const storeSchema = {
-      enabled: {
-        type: 'boolean',
-        default: false,
-      },
-    };
-    this.store = new Store({schema: storeSchema});
+    this.store = new Store();
+    this.depositPublicKey = this.store.get('depositPublicKey', '');
 
     this.state = {
       transactionCount: 0,
-      totalMined: 0,
+      totalMined: this.store.get('totalMined', 0),
+      newMined: 0,
       totalSupply: 0,
-      enabled: this.store.get('enabled'),
+      enabled: this.store.get('enabled', false),
+      unsavedDepositPublicKey: this.depositPublicKey,
+      unsavedDepositPublicKeyValid: isValidPublicKey(this.depositPublicKey),
+      unsavedDepositPublicKeySavePrompt: false,
+      depositPublicKeyBalance: ' ',
     };
     this.connection = new Connection(url);
     log.info('connection:', url);
@@ -84,7 +97,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.id = setInterval(() => this.updateClusterStats(), 2000);
+    this.updateClusterStats();
+    this.id = setInterval(() => this.updateClusterStats(), 10000);
   }
 
   componentWillUnmount() {
@@ -142,24 +156,60 @@ class App extends React.Component {
 
   clusterRestart() {
     this.addTerminalText(`Cluster restart detected at ${new Date()}`);
-    this.replicator.restart();
+    this.replicator.clusterRestart();
+    this.setState({
+      transactionCount: 0,
+    });
+    setTimeout(() => this.updateClusterStats());
   }
 
   async updateClusterStats() {
     try {
       const transactionCount = await this.connection.getTransactionCount();
-      const totalSupply = await this.connection.getTotalSupply();
 
       if (transactionCount < this.state.transactionCount / 2) {
         this.addTerminalText(
           `Transaction count decreased from ${this.state.transactionCount} to ${transactionCount}`,
         );
         this.clusterRestart();
+        return;
+      }
+
+      const totalSupply = await this.connection.getTotalSupply();
+      const newMined = await this.replicator.adjustedReplicatorBalance();
+      let totalMined = this.state.totalMined;
+
+      if (newMined > this.store.get('depositMinimumLamports', 10000)) {
+        if (isValidPublicKey(this.depositPublicKey)) {
+          this.replicator.depositMiningRewards(
+            new PublicKey(this.depositPublicKey),
+            newMined,
+          );
+          totalMined += newMined;
+          this.store.set('totalMined', totalMined);
+        }
+      }
+
+      let depositPublicKeyBalance = ' ';
+      if (isValidPublicKey(this.depositPublicKey)) {
+        try {
+          const balance = await this.connection.getBalance(
+            new PublicKey(this.depositPublicKey),
+          );
+          depositPublicKeyBalance = `Account Balance: ${balance} lamports`;
+        } catch (err) {
+          log.warn(
+            `Unable to getBalance of ${this.depositPublicKey}: ${err.message}`,
+          );
+        }
       }
 
       this.setState({
-        transactionCount,
+        newMined,
+        totalMined,
         totalSupply,
+        transactionCount,
+        depositPublicKeyBalance,
       });
     } catch (err) {
       log.error('updateClusterStats failed', err);
@@ -175,6 +225,52 @@ class App extends React.Component {
       this.replicator.start();
     } else {
       this.replicator.stop();
+    }
+  };
+
+  onDepositAccountChange = event => {
+    log.info('onDepositAccountChange:', event.target.value);
+
+    const unsavedDepositPublicKey = event.target.value;
+    const unsavedDepositPublicKeyValid = isValidPublicKey(
+      unsavedDepositPublicKey,
+    );
+    const unsavedDepositPublicKeySavePrompt =
+      unsavedDepositPublicKeyValid &&
+      unsavedDepositPublicKey !== this.depositPublicKey;
+
+    this.setState({
+      unsavedDepositPublicKey,
+      unsavedDepositPublicKeyValid,
+      unsavedDepositPublicKeySavePrompt,
+    });
+
+    this.updateClusterStats();
+  };
+
+  onDepositAccountSave = () => {
+    log.info('onDepositAccountSave');
+    const {
+      unsavedDepositPublicKey,
+      unsavedDepositPublicKeySavePrompt,
+    } = this.state;
+
+    if (!unsavedDepositPublicKeySavePrompt) {
+      return;
+    }
+
+    this.store.set('depositPublicKey', unsavedDepositPublicKey);
+    this.depositPublicKey = unsavedDepositPublicKey;
+    this.setState({
+      unsavedDepositPublicKey,
+      unsavedDepositPublicKeySavePrompt: false,
+      depositPublicKeyBalance: ' ',
+    });
+  };
+
+  onDepositAccountKeyDown = event => {
+    if (event.keyCode === 13) {
+      this.onDepositAccountSave();
     }
   };
 
@@ -241,11 +337,35 @@ class App extends React.Component {
                 Deposit mining rewards into this account:
               </Typography>
               <TextField
-                error={false}
+                error={!this.state.unsavedDepositPublicKeyValid}
                 placeholder="Account Public Key"
                 className={classes.publicKeyTextField}
+                onChange={this.onDepositAccountChange}
+                value={this.state.unsavedDepositPublicKey}
+                onKeyDown={this.onDepositAccountKeyDown}
                 margin="normal"
-                helperText="Account Balance: 12345 lamports"
+                helperText={
+                  this.state.unsavedDepositPublicKeyValid
+                    ? this.state.depositPublicKeyBalance
+                    : 'Enter a valid account public key'
+                }
+                InputProps={{
+                  /* eslint-disable indent */
+                  endAdornment: this.state.unsavedDepositPublicKeySavePrompt ? (
+                    /* eslint-disable react/jsx-indent */
+                    <InputAdornment position="end">
+                      <IconButton
+                        color="primary"
+                        aria-label="Save"
+                        onClick={this.onDepositAccountSave}
+                      >
+                        <SaveIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ) : /* eslint-enable react/jsx-indent */
+                  null,
+                  /* eslint-enable indent */
+                }}
               />
             </Grid>
           </Grid>
@@ -255,7 +375,12 @@ class App extends React.Component {
             <Grid container spacing={1}>
               <Grid item xs>
                 <Typography variant="caption" noWrap>
-                  Lamports mined: {this.state.totalMined}
+                  Total Lamports mined: {this.state.totalMined}
+                </Typography>
+              </Grid>
+              <Grid item xs>
+                <Typography variant="caption" noWrap>
+                  Recently mined Lamports: {this.state.newMined}
                 </Typography>
               </Grid>
               <Grid item xs>

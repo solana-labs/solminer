@@ -3,33 +3,35 @@ import {spawn} from 'promisify-child-process';
 import path from 'path';
 import electron from 'electron';
 import jsonfile from 'jsonfile';
-import {Account} from '@solana/web3.js';
+import {Account, SystemProgram} from '@solana/web3.js';
 import {solanaInstallInit} from './solana-install-init';
+
+// https://github.com/solana-labs/solana/issues/4344
+const airdropAmount = 100000;
 
 export class Replicator {
   constructor(connection, terminalOutput) {
-    this.connection = connection;
-    this.terminalOutput = terminalOutput;
-    this.running = false;
-    this.mainPromise = Promise.resolve();
-    this.cmdCancel = () => undefined;
-
     const userDataPath = electron.remote.app.getPath('userData');
-    this.solanaInstallBinDir = path.join(
-      userDataPath,
-      'install',
-      'active_release',
-      'bin',
-    );
-    this.replicatorKeypairFile = path.join(
-      userDataPath,
-      'replicator-keypair.json',
-    );
-    this.storageKeypairFile = path.join(userDataPath, 'storage-keypair.json');
-    this.replicatorLedgerDir = path.join(userDataPath, 'ledger');
 
-    this.solanaInstallConfig = path.join(userDataPath, 'config.yml');
-    this.solanaInstallDataDir = path.join(userDataPath, 'install');
+    Object.assign(this, {
+      connection,
+      terminalOutput,
+      running: false,
+      mainPromise: Promise.resolve(),
+      cmdCancel: () => undefined,
+      solanaInstallBinDir: path.join(
+        userDataPath,
+        'install',
+        'active_release',
+        'bin',
+      ),
+      replicatorKeypair: null,
+      replicatorKeypairFile: path.join(userDataPath, 'replicator-keypair.json'),
+      storageKeypairFile: path.join(userDataPath, 'storage-keypair.json'),
+      replicatorLedgerDir: path.join(userDataPath, 'ledger'),
+      solanaInstallConfig: path.join(userDataPath, 'config.yml'),
+      solanaInstallDataDir: path.join(userDataPath, 'install'),
+    });
   }
 
   async start() {
@@ -52,12 +54,53 @@ export class Replicator {
     await this.mainPromise;
   }
 
-  async restart() {
+  async clusterRestart() {
     if (!this.running) {
       return;
     }
     await this.stop();
     this.start();
+  }
+
+  async adjustedReplicatorBalance() {
+    if (this.replicatorKeypair.publicKey) {
+      try {
+        return Math.max(
+          0,
+          (await this.connection.getBalance(this.replicatorKeypair.publicKey)) -
+            airdropAmount,
+        );
+      } catch (err) {
+        log.warn('adjustedReplicatorBalance failed:', err.message);
+      }
+    }
+    return 0;
+  }
+
+  async depositMiningRewards(destinationPublicKey, amount) {
+    if (this.replicatorKeypair.publicKey === null) {
+      return;
+    }
+
+    try {
+      log.info(
+        `depositMiningRewards: ${amount} lamports to ${destinationPublicKey}`,
+      );
+      const transaction = SystemProgram.transfer(
+        this.replicatorKeypair.publicKey,
+        destinationPublicKey,
+        amount,
+      );
+      await this.connection.sendTransaction(
+        transaction,
+        this.replicatorKeypair,
+      );
+
+      // Don't bother trying to confirm the transaction.  If it fails the caller
+      // can just retry later
+    } catch (err) {
+      log.warn('destinationPublicKey failed:', err.message);
+    }
   }
 
   /**
@@ -103,17 +146,12 @@ export class Replicator {
         this.solanaInstallDataDir,
         '--no-modify-path',
       ]);
+
       await this.cmd(solanaKeygen, [
         'new',
         '-f',
         '-o',
         this.replicatorKeypairFile,
-      ]);
-      await this.cmd(solanaWallet, [
-        '--keypair',
-        this.replicatorKeypairFile,
-        'airdrop',
-        '100000',
       ]);
 
       await this.cmd(solanaKeygen, [
@@ -126,9 +164,17 @@ export class Replicator {
       const replicatorKeypair = new Account(
         Buffer.from(jsonfile.readFileSync(this.replicatorKeypairFile)),
       );
+      this.replicatorKeypair = replicatorKeypair;
       const storageKeypair = new Account(
         Buffer.from(jsonfile.readFileSync(this.storageKeypairFile)),
       );
+
+      await this.cmd(solanaWallet, [
+        '--keypair',
+        this.replicatorKeypairFile,
+        'airdrop',
+        airdropAmount.toString(),
+      ]);
 
       await this.cmd(solanaWallet, [
         '--keypair',
