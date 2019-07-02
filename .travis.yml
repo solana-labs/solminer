@@ -28,6 +28,13 @@ branches:
   - /^v\d+\.\d+\.\d+/
 
 install:
+- if !$TRAVIS_PULL_REQUEST && [ $TRAVIS_OS_NAME = osx ]; then
+    security create-keychain -p mynotsecretpassword build.keychain;
+    security default-keychain -s build.keychain;
+    security unlock-keychain -p mynotsecretpassword build.keychain;
+    security import cert/solminer.p12 -k build.keychain -P "$SOLMINER_P12_PASSWORD" -T /usr/bin/codesign;
+    security find-identity -v;
+  fi
 - yarn
 
 script:

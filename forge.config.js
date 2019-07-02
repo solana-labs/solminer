@@ -30,6 +30,7 @@ module.exports = {
     packageManager: 'yarn',
     icon: 'src/images/icon/solminer',
     extraResource: solanaInstallInit,
+    osxSign: !!process.env.TRAVIS, // Only sign if running on Travis CI
   },
   electronWinstallerConfig,
   electronInstallerDMG: {
