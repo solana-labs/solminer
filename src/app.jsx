@@ -102,6 +102,10 @@ class App extends React.Component {
       unsavedDepositPublicKeyValid: isValidPublicKey(this.depositPublicKey),
       unsavedDepositPublicKeySavePrompt: false,
       depositPublicKeyBalance: ' ',
+      // TODO: Make 10000 configurable by the user.  Smaller values will cause
+      // the user to pay more transaction fees.  Also consider adding logic to
+      // monitor the current cluster fees and redeem when fees are low
+      depositMinimumLamports: this.store.get('depositMinimumLamports', 10000),
     };
   }
 
@@ -163,7 +167,7 @@ class App extends React.Component {
       const newMined = await this.replicator.adjustedReplicatorBalance();
       let totalMined = this.state.totalMined;
 
-      if (newMined > this.store.get('depositMinimumLamports', 10000)) {
+      if (newMined > this.state.depositMinimumLamports) {
         if (isValidPublicKey(this.depositPublicKey)) {
           this.replicator.depositMiningRewards(
             new PublicKey(this.depositPublicKey),
@@ -196,7 +200,7 @@ class App extends React.Component {
         depositPublicKeyBalance,
       });
     } catch (err) {
-      console.warn('updateClusterStats failed', err);
+      log.warn('updateClusterStats failed', err);
     }
   }
 
@@ -318,7 +322,7 @@ class App extends React.Component {
               </div>
               <p />
               <Typography variant="subtitle1">
-                Deposit mining rewards into this account:
+                Deposit rewards into this account every {this.state.depositMinimumLamports} lamports mined:
               </Typography>
               <TextField
                 error={!this.state.unsavedDepositPublicKeyValid}
@@ -359,12 +363,12 @@ class App extends React.Component {
             <Grid container spacing={1}>
               <Grid item xs>
                 <Typography variant="caption" noWrap>
-                  Total Lamports mined: {this.state.totalMined}
+                  Recently mined Lamports: {this.state.newMined}
                 </Typography>
               </Grid>
               <Grid item xs>
                 <Typography variant="caption" noWrap>
-                  Recently mined Lamports: {this.state.newMined}
+                  Total deposited Lamports: {this.state.totalMined}
                 </Typography>
               </Grid>
               <Grid item xs>
