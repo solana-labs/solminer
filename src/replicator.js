@@ -146,13 +146,24 @@ export class Replicator {
 
     child.stdout.on('data', logData);
     child.stderr.on('data', logData);
+    child.on('error', err => {
+      log.info('child error:', err);
+    });
+
     return Promise.race([
       child,
-      new Promise((_, reject) => {
-        this.cmdCancel = () => {
+      new Promise(resolve => {
+        this.cmdCancel = async () => {
           log.info(`cmd cancelled, killing pid ${child.pid}`);
+          try {
+            await fkill(child.pid);
+          } catch (err) {
+            log.debug('fkill error:', err);
+          }
           child.kill();
-          reject(new Error('User abort'));
+
+          console.info('User abort');
+          resolve();
         };
       }),
     ]);
@@ -215,8 +226,13 @@ export class Replicator {
         '--no-modify-path',
       ]);
 
-      const newReplicatorKeypair = await this.maybeGenerateKeypair(this.replicatorKeypairFile);
-      const newStorageKeypair = await this.maybeGenerateKeypair(this.storageKeypairFile, newReplicatorKeypair);
+      const newReplicatorKeypair = await this.maybeGenerateKeypair(
+        this.replicatorKeypairFile,
+      );
+      const newStorageKeypair = await this.maybeGenerateKeypair(
+        this.storageKeypairFile,
+        newReplicatorKeypair,
+      );
 
       console.info(`identity keypair: ${this.replicatorKeypairFile}`);
       console.info(`storage keypair: ${this.storageKeypairFile}`);
