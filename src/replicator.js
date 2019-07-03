@@ -161,9 +161,32 @@ export class Replicator {
   /**
    * @private
    */
+  async maybeGenerateKeypair(keypairFile, force = false) {
+    const solanaKeygen = `${this.solanaInstallBinDir}/solana-keygen`;
+
+    if (!force) {
+      try {
+        await fs.access(keypairFile, fs.constants.R_OK);
+        const keypair = new Account(
+          Buffer.from(jsonfile.readFileSync(keypairFile)),
+        );
+        const balance = await this.connection.getBalance(keypair.publicKey);
+        if (balance > 0) {
+          return false;
+        }
+      } catch (err) {
+        log.debug('maybeGenerateKeypair error:', err);
+      }
+    }
+    await this.cmd(solanaKeygen, ['new', '-f', '-o', keypairFile]);
+    return true;
+  }
+
+  /**
+   * @private
+   */
   async main() {
     const solanaInstall = `${this.solanaInstallBinDir}/solana-install`;
-    const solanaKeygen = `${this.solanaInstallBinDir}/solana-keygen`;
     const solanaWallet = `${this.solanaInstallBinDir}/solana-wallet`;
 
     try {
@@ -192,23 +215,11 @@ export class Replicator {
         '--no-modify-path',
       ]);
 
-      try {
-        await fs.access(this.replicatorKeypairFile, fs.constants.R_OK);
-      } catch (err) {
-        await this.cmd(solanaKeygen, [
-          'new',
-          '-f',
-          '-o',
-          this.replicatorKeypairFile,
-        ]);
-      }
+      const newReplicatorKeypair = await this.maybeGenerateKeypair(this.replicatorKeypairFile);
+      const newStorageKeypair = await this.maybeGenerateKeypair(this.storageKeypairFile, newReplicatorKeypair);
 
-      await this.cmd(solanaKeygen, [
-        'new',
-        '-f',
-        '-o',
-        this.storageKeypairFile,
-      ]);
+      console.info(`identity keypair: ${this.replicatorKeypairFile}`);
+      console.info(`storage keypair: ${this.storageKeypairFile}`);
 
       const replicatorKeypair = new Account(
         Buffer.from(jsonfile.readFileSync(this.replicatorKeypairFile)),
@@ -218,23 +229,35 @@ export class Replicator {
         Buffer.from(jsonfile.readFileSync(this.storageKeypairFile)),
       );
 
-      const replicatorStartBalance = await this.connection.getBalance(
+      console.info(`identity pubkey: ${replicatorKeypair.publicKey}`);
+      console.info(`storage pubkey: ${storageKeypair.publicKey}`);
+
+      const replicatorStartingBalance = await this.connection.getBalance(
         this.replicatorKeypair.publicKey,
       );
-      if (replicatorStartBalance < airdropAmount) {
+      if (replicatorStartingBalance < airdropAmount) {
         await this.cmd(solanaWallet, [
           '--keypair',
           this.replicatorKeypairFile,
           'airdrop',
-          (airdropAmount - replicatorStartBalance).toString(),
+          (airdropAmount - replicatorStartingBalance).toString(),
+        ]);
+      }
+
+      if (newStorageKeypair) {
+        await this.cmd(solanaWallet, [
+          '--keypair',
+          this.replicatorKeypairFile,
+          'create-replicator-storage-account',
+          replicatorKeypair.publicKey.toString(),
+          storageKeypair.publicKey.toString(),
         ]);
       }
 
       await this.cmd(solanaWallet, [
         '--keypair',
         this.replicatorKeypairFile,
-        'create-replicator-storage-account',
-        replicatorKeypair.publicKey.toString(),
+        'show-storage-account',
         storageKeypair.publicKey.toString(),
       ]);
 
