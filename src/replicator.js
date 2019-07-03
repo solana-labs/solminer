@@ -116,12 +116,13 @@ export class Replicator {
     const child = spawn(command, args, {env});
     log.info(`pid ${child.pid}`);
 
-    child.stdout.on('data', data =>
-      console.log(data.toString().replace(/\n+$/, '')),
-    );
-    child.stderr.on('data', data =>
-      console.log(data.toString().replace(/\n+$/, '')),
-    );
+    function logData(data) {
+      const s = data.toString().replace(/\n+$/, '');
+      s.split(/\n/).forEach(line => console.log(line));
+    }
+
+    child.stdout.on('data', logData);
+    child.stderr.on('data', logData);
     return Promise.race([
       child,
       new Promise((_, reject) => {

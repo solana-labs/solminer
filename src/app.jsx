@@ -64,8 +64,9 @@ class LogConsole extends React.Component {
       <div
         style={{
           backgroundColor: '#242424',
-          height: '450px',
-          overflow: 'scroll',
+          height: '470px',
+          // overflow: 'scroll',
+          overflow: 'hidden',
         }}
       >
         <div style={{width: '1000%'}}>
@@ -76,14 +77,14 @@ class LogConsole extends React.Component {
   }
 }
 LogConsole.propTypes = {
-  logs: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  logs: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 // eslint-disable-next-line react/no-multi-comp
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.terminalHeight = 25;
+    this.terminalHeight = 10;
     this.store = new Store();
     this.depositPublicKey = this.store.get('depositPublicKey', '');
 
@@ -107,8 +108,11 @@ class App extends React.Component {
 
   componentDidMount() {
     Hook(console, newLog => {
-      const logs = [...this.state.logs, Decode(newLog)];
-      const max = 1024;
+      const decodeLog = Decode(newLog);
+      log.info('term:', decodeLog.data[0]);
+      const {logs} = this.state;
+      logs.push(decodeLog);
+      const max = 20;
       if (logs.length > max) {
         logs.splice(0, logs.length - max);
       }
@@ -380,7 +384,7 @@ class App extends React.Component {
               </Grid>
             </Grid>
           </Container>
-          <AutoscrollLogConsole logs={this.state.logs} />
+          <AutoscrollLogConsole logs={this.state.logs} variant="dark" />
         </div>
       </div>
     );

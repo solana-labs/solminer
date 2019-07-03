@@ -24,7 +24,7 @@ app.on('ready', async () => {
   const devModeExtra = isDevMode ? 200 : 0;
   mainWindow = new BrowserWindow({
     width: 1000 + devModeExtra,
-    height: 830,
+    height: 820,
     resizable: isDevMode,
     webPreferences: {
       nodeIntegration: true,
