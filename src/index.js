@@ -1,4 +1,4 @@
-import {app, BrowserWindow, Menu} from 'electron';
+import {app, ipcMain, BrowserWindow, Menu} from 'electron';
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer';
@@ -6,6 +6,7 @@ import {enableLiveReload} from 'electron-compile';
 import path from 'path';
 import log from 'electron-log';
 import './updater';
+import {sleep} from './sleep';
 
 // eslint-disable-next-line global-require
 if (require('electron-squirrel-startup')) app.quit();
@@ -61,6 +62,35 @@ app.on('ready', async () => {
     await installExtension(REACT_DEVELOPER_TOOLS);
     mainWindow.webContents.openDevTools();
   }
+
+  let closing = false;
+  let closed = false;
+  mainWindow.on('close', (event) => {
+    if (closed || closing) {
+      return;
+    }
+    closing = true;
+
+    console.log('closing mainWindow...');
+    mainWindow.hide();
+    if (app.dock) {
+      app.dock.hide();
+    }
+    ipcMain.on('replicator-stopped', () => {
+      console.log('renderer process signaled replicator-stopped');
+      closed = true;
+      app.quit();
+    });
+    sleep(2000).then(() => {
+      console.log('Timeout waiting for replicator to stop');
+      closed = true;
+      app.quit();
+    });
+
+    console.log('Signaling renderer process to stop-replicator');
+    mainWindow.webContents.send('stop-replicator');
+    event.preventDefault();
+  });
 
   mainWindow.on('closed', () => {
     mainWindow = null;

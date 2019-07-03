@@ -12,13 +12,10 @@ import {
 } from '@solana/web3.js';
 import fs from 'mz/fs';
 import {solanaInstallInit} from './solana-install-init';
+import {sleep} from './sleep';
 
 // TODO: https://github.com/solana-labs/solana/issues/4344
 const airdropAmount = 100000;
-
-export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 export class Replicator {
   constructor(connection) {
@@ -42,6 +39,17 @@ export class Replicator {
       replicatorLedgerDir: path.join(userDataPath, 'ledger'),
       solanaInstallConfig: path.join(userDataPath, 'config.yml'),
       solanaInstallDataDir: path.join(userDataPath, 'install'),
+    });
+
+    // Stop if the main process requests it
+    electron.ipcRenderer.on('stop-replicator', async () => {
+      log.info('stop-replicator requested');
+      try {
+        await this.stop();
+      } catch (err) {
+        log.info('stop-replicator: error:', err);
+      }
+      electron.ipcRenderer.send('replicator-stopped');
     });
   }
 

@@ -136,7 +136,6 @@ class App extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.id);
-    this.replicator.stop(); // TODO: racy, need to await...
   }
 
   clearTerminal() {
