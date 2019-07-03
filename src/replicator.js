@@ -5,6 +5,7 @@ import electron from 'electron';
 import jsonfile from 'jsonfile';
 import {Account, SystemProgram} from '@solana/web3.js';
 import {solanaInstallInit} from './solana-install-init';
+import fs from 'mz/fs';
 
 // TODO: https://github.com/solana-labs/solana/issues/4344
 const airdropAmount = 100000;
@@ -152,12 +153,18 @@ export class Replicator {
         '--no-modify-path',
       ]);
 
-      await this.cmd(solanaKeygen, [
-        'new',
-        '-f',
-        '-o',
-        this.replicatorKeypairFile,
-      ]);
+      try {
+        await fs.access(this.replicatorKeypairFile, fs.constants.R_OK);
+      } catch (err) {
+        log.info(err);
+        log.info('2234323');
+        await this.cmd(solanaKeygen, [
+          'new',
+          '-f',
+          '-o',
+          this.replicatorKeypairFile,
+        ]);
+      }
 
       await this.cmd(solanaKeygen, [
         'new',
