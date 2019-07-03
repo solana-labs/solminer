@@ -8,3 +8,8 @@
 
 ## Solminer
 Cross-platform Solana Replicator UI
+
+### Log file
+Solminer writes a log of its activities, which can be a useful debugging aid:
+* macOS: `~/Library/Logs/solminer/log.log`
+* Windows: `%APPDATA%\solminer\log.log`
