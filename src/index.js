@@ -4,6 +4,7 @@ import installExtension, {
 } from 'electron-devtools-installer';
 import {enableLiveReload} from 'electron-compile';
 import path from 'path';
+import os from 'os';
 import log from 'electron-log';
 import './updater';
 import {sleep} from './sleep';
@@ -34,29 +35,31 @@ app.on('ready', async () => {
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);
 
-  // Create the Application's main menu
-  Menu.setApplicationMenu(
-    Menu.buildFromTemplate([
-      {
-        label: 'Solminer',
-        submenu: [
-          {
-            label: 'Quit',
-            accelerator: 'Command+Q',
-            click: () => app.quit(),
-          },
-        ],
-      },
-      {
-        label: 'Edit',
-        submenu: [
-          {label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:'},
-          {label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:'},
-          {label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:'},
-        ],
-      },
-    ]),
-  );
+  if (os.type() === 'Darwin') {
+    // macOS Cut/Copy/Paste doesn't work with an Edit menu...
+    Menu.setApplicationMenu(
+      Menu.buildFromTemplate([
+        {
+          label: 'Solminer',
+          submenu: [
+            {
+              label: 'Quit',
+              accelerator: 'Command+Q',
+              click: () => app.quit(),
+            },
+          ],
+        },
+        {
+          label: 'Edit',
+          submenu: [
+            {label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:'},
+            {label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:'},
+            {label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:'},
+          ],
+        },
+      ]),
+    );
+  }
 
   if (isDevMode) {
     await installExtension(REACT_DEVELOPER_TOOLS);
@@ -65,7 +68,7 @@ app.on('ready', async () => {
 
   let closing = false;
   let closed = false;
-  mainWindow.on('close', (event) => {
+  mainWindow.on('close', event => {
     if (closed || closing) {
       return;
     }
