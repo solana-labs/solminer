@@ -3,7 +3,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import Grid from '@material-ui/core/Grid';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -44,9 +43,6 @@ const styles = theme => ({
   },
   storageSlider: {
     marginTop: theme.spacing(5),
-  },
-  progressBar: {
-    marginTop: theme.spacing(2),
   },
   footer: {
     marginTop: theme.spacing(1),
@@ -384,11 +380,6 @@ class App extends React.Component {
               </Grid>
             </Grid>
           </Container>
-          <LinearProgress
-            variant={this.state.enabled ? 'indeterminate' : 'determinate'}
-            value={100}
-            className={classes.progressBar}
-          />
           <AutoscrollLogConsole logs={this.state.logs} />
         </div>
       </div>
