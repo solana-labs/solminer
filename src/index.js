@@ -1,4 +1,4 @@
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, Menu} from 'electron';
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer';
@@ -32,6 +32,30 @@ app.on('ready', async () => {
   });
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);
+
+  // Create the Application's main menu
+  Menu.setApplicationMenu(
+    Menu.buildFromTemplate([
+      {
+        label: 'Solminer',
+        submenu: [
+          {
+            label: 'Quit',
+            accelerator: 'Command+Q',
+            click: () => app.quit(),
+          },
+        ],
+      },
+      {
+        label: 'Edit',
+        submenu: [
+          {label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:'},
+          {label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:'},
+          {label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:'},
+        ],
+      },
+    ]),
+  );
 
   if (isDevMode) {
     await installExtension(REACT_DEVELOPER_TOOLS);
