@@ -141,6 +141,9 @@ export class Replicator {
    * @private
    */
   async cmd(command, args) {
+    if (!this.running) {
+      throw new Error(`Unable to run ${command}, not running`);
+    }
     console.log(`$ ${command} ${args.join(' ')}`);
     log.info(`$ ${command} ${args.join(' ')}`);
     const env = Object.assign({}, {RUST_LOG: 'solana=info'}, process.env);

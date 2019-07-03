@@ -20,7 +20,44 @@ log.info('userData:', app.getPath('userData'));
 const isDevMode = process.execPath.match(/[\\/]electron/);
 if (isDevMode) enableLiveReload({strategy: 'react-hmr'});
 
-let mainWindow;
+let mainWindow = null;
+let shutdownInProgress = false;
+let shutdownComplete = false;
+
+function shutdown() {
+  if (shutdownComplete) {
+    console.log('shutdown: shutdownComplete');
+    return true;
+  }
+
+  if (mainWindow) {
+    if (shutdownInProgress) {
+      console.log('shutdown: shutdownInProgress in progress');
+      return false;
+    }
+    shutdownInProgress = true;
+
+    ipcMain.on('replicator-stopped', () => {
+      console.log('shutdown: renderer process signaled replicator-stopped');
+      shutdownComplete = true;
+      app.quit();
+    });
+    sleep(10000).then(() => {
+      console.log('shutdown: timeout waiting for replicator to stop');
+      shutdownComplete = true;
+      app.quit();
+    });
+
+    console.log('shutdown: signaling renderer process to stop-replicator');
+    mainWindow.webContents.send('stop-replicator');
+    return false;
+  }
+
+  console.log('shutdown: no mainWindow, quitting now');
+  shutdownComplete = true;
+  app.quit();
+  return true;
+}
 
 app.on('ready', async () => {
   const devModeExtra = isDevMode ? 200 : 0;
@@ -66,40 +103,35 @@ app.on('ready', async () => {
     mainWindow.webContents.openDevTools();
   }
 
-  let closing = false;
-  let closed = false;
   mainWindow.on('close', event => {
-    if (closed || closing) {
-      return;
+    console.log('mainWindow close');
+    if (!shutdown()) {
+      mainWindow.hide();
+      event.preventDefault();
     }
-    closing = true;
-
-    console.log('closing mainWindow...');
-    mainWindow.hide();
-    if (app.dock) {
-      app.dock.hide();
-    }
-    ipcMain.on('replicator-stopped', () => {
-      console.log('renderer process signaled replicator-stopped');
-      closed = true;
-      app.quit();
-    });
-    sleep(2000).then(() => {
-      console.log('Timeout waiting for replicator to stop');
-      closed = true;
-      app.quit();
-    });
-
-    console.log('Signaling renderer process to stop-replicator');
-    mainWindow.webContents.send('stop-replicator');
-    event.preventDefault();
   });
 
   mainWindow.on('closed', () => {
+    console.log('mainWindow closed');
     mainWindow = null;
   });
 });
 
-app.on('window-all-closed', () => {
-  app.quit();
+app.on('window-all-closed', event => {
+  console.log('window-all-closed');
+  if (!shutdown()) {
+    event.preventDefault();
+  }
+});
+app.on('before-quit', event => {
+  console.log('before-quit');
+  if (!shutdown()) {
+    event.preventDefault();
+  }
+});
+app.on('will-quit', () => {
+  console.log('will-quit');
+});
+app.on('quit', () => {
+  console.log('quit');
 });
