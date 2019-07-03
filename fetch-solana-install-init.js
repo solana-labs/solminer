@@ -67,12 +67,14 @@ async function main() {
         'solana-install-init-x86_64-apple-darwin',
         'solana-install-init',
       );
+      fs.chmodSync('solana-install-init', 0o555);
       break;
     case 'Linux':
       download(
         'solana-install-init-x86_64-unknown-linux-gnu',
         'solana-install-init',
       );
+      fs.chmodSync('solana-install-init', 0o555);
       break;
     default:
       throw new Error(`Unsupported OS type: ${os.type()}`);

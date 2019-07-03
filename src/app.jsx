@@ -322,7 +322,8 @@ class App extends React.Component {
               </div>
               <p />
               <Typography variant="subtitle1">
-                Deposit rewards into this account every {this.state.depositMinimumLamports} lamports mined:
+                Deposit rewards into this account every{' '}
+                {this.state.depositMinimumLamports} lamports mined:
               </Typography>
               <TextField
                 error={!this.state.unsavedDepositPublicKeyValid}

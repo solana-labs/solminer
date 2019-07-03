@@ -6,8 +6,12 @@ import jsonfile from 'jsonfile';
 import {Account, SystemProgram} from '@solana/web3.js';
 import {solanaInstallInit} from './solana-install-init';
 
-// https://github.com/solana-labs/solana/issues/4344
+// TODO: https://github.com/solana-labs/solana/issues/4344
 const airdropAmount = 100000;
+
+export function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 export class Replicator {
   constructor(connection) {
@@ -207,7 +211,9 @@ export class Replicator {
       log.info('main: not running anymore');
       return Promise.resolve();
     }
-    log.info('main: still running, restarting');
+
+    log.info('main: still running, restarting after sleep');
+    await sleep(2000);
     return this.main();
   }
 }
