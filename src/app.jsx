@@ -65,8 +65,8 @@ class LogConsole extends React.Component {
         style={{
           backgroundColor: '#242424',
           height: '470px',
-          // overflow: 'scroll',
-          overflow: 'hidden',
+          overflowX: 'scroll',
+          overflowY: 'hidden',
         }}
       >
         <div style={{width: '1000%'}}>
@@ -169,12 +169,14 @@ class App extends React.Component {
 
       if (newMined > this.state.depositMinimumLamports) {
         if (isValidPublicKey(this.depositPublicKey)) {
-          this.replicator.depositMiningRewards(
+          const success = await this.replicator.depositMiningRewards(
             new PublicKey(this.depositPublicKey),
             newMined,
           );
-          totalMined += newMined;
-          this.store.set('totalMined', totalMined);
+          if (success) {
+            totalMined += newMined;
+            this.store.set('totalMined', totalMined);
+          }
         }
       }
 
@@ -369,7 +371,7 @@ class App extends React.Component {
               </Grid>
               <Grid item xs>
                 <Typography variant="caption" noWrap>
-                  Total deposited Lamports: {this.state.totalMined}
+                  Total mined Lamports: {this.state.totalMined}
                 </Typography>
               </Grid>
               <Grid item xs>

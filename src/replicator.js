@@ -3,9 +3,13 @@ import {spawn} from 'promisify-child-process';
 import path from 'path';
 import electron from 'electron';
 import jsonfile from 'jsonfile';
-import {Account, SystemProgram} from '@solana/web3.js';
-import {solanaInstallInit} from './solana-install-init';
+import {
+  sendAndConfirmTransaction,
+  Account,
+  SystemProgram,
+} from '@solana/web3.js';
 import fs from 'mz/fs';
+import {solanaInstallInit} from './solana-install-init';
 
 // TODO: https://github.com/solana-labs/solana/issues/4344
 const airdropAmount = 100000;
@@ -20,6 +24,7 @@ export class Replicator {
 
     Object.assign(this, {
       connection,
+      depositInProgress: false,
       running: false,
       mainPromise: Promise.resolve(),
       cmdCancel: () => undefined,
@@ -69,11 +74,14 @@ export class Replicator {
   async adjustedReplicatorBalance() {
     if (this.replicatorKeypair !== null) {
       try {
-        return Math.max(
-          0,
-          (await this.connection.getBalance(this.replicatorKeypair.publicKey)) -
-            airdropAmount,
+        const realBalance = await this.connection.getBalance(
+          this.replicatorKeypair.publicKey,
         );
+        const adjustedBalance = Math.max(0, realBalance - airdropAmount);
+        log.info(
+          `adjustedReplicatorBalance: real=${realBalance} adjusted=${adjustedBalance}`,
+        );
+        return adjustedBalance;
       } catch (err) {
         log.warn('adjustedReplicatorBalance failed:', err.message);
       }
@@ -82,9 +90,13 @@ export class Replicator {
   }
 
   async depositMiningRewards(destinationPublicKey, amount) {
-    if (this.replicatorKeypair.publicKey === null) {
-      return;
+    if (this.replicatorKeypair === null) {
+      return false;
     }
+    if (this.depositInProgress) {
+      return false;
+    }
+    this.depositInProgress = true;
 
     try {
       log.info(
@@ -95,15 +107,23 @@ export class Replicator {
         destinationPublicKey,
         amount,
       );
-      await this.connection.sendTransaction(
+      const signature = await sendAndConfirmTransaction(
+        this.connection,
         transaction,
         this.replicatorKeypair,
       );
-
-      // Don't bother trying to confirm the transaction.  If it fails the caller
-      // can just retry later
+      console.info(
+        `Deposited mining rewards (${amount} lamports).  Transaction signature: ${signature}`,
+      );
+      return true;
     } catch (err) {
-      log.warn('destinationPublicKey failed:', err.message);
+      console.error(
+        `Deposit mining rewards failed (${amount} lamports):`,
+        err.message,
+      );
+      return false;
+    } finally {
+      this.depositInProgress = false;
     }
   }
 
@@ -156,8 +176,6 @@ export class Replicator {
       try {
         await fs.access(this.replicatorKeypairFile, fs.constants.R_OK);
       } catch (err) {
-        log.info(err);
-        log.info('2234323');
         await this.cmd(solanaKeygen, [
           'new',
           '-f',
@@ -181,12 +199,17 @@ export class Replicator {
         Buffer.from(jsonfile.readFileSync(this.storageKeypairFile)),
       );
 
-      await this.cmd(solanaWallet, [
-        '--keypair',
-        this.replicatorKeypairFile,
-        'airdrop',
-        airdropAmount.toString(),
-      ]);
+      const replicatorStartBalance = await this.connection.getBalance(
+        this.replicatorKeypair.publicKey,
+      );
+      if (replicatorStartBalance < airdropAmount) {
+        await this.cmd(solanaWallet, [
+          '--keypair',
+          this.replicatorKeypairFile,
+          'airdrop',
+          (airdropAmount - replicatorStartBalance).toString(),
+        ]);
+      }
 
       await this.cmd(solanaWallet, [
         '--keypair',
