@@ -3,6 +3,7 @@ import {spawn} from 'promisify-child-process';
 import path from 'path';
 import electron from 'electron';
 import jsonfile from 'jsonfile';
+import fkill from 'fkill';
 import {
   sendAndConfirmTransaction,
   Account,
@@ -165,6 +166,15 @@ export class Replicator {
     const solanaWallet = `${this.solanaInstallBinDir}/solana-wallet`;
 
     try {
+      // Ensure nothing is lingering in the background
+      try {
+        await fkill(['solana-install', 'solana-replicator', 'solana-wallet'], {
+          force: true,
+        });
+      } catch (err) {
+        log.debug('fkill errored with:', err);
+      }
+
       await this.cmd(solanaInstallInit, [
         '--config',
         this.solanaInstallConfig,
@@ -235,7 +245,7 @@ export class Replicator {
         this.replicatorLedgerDir,
       ]);
     } catch (err) {
-      console.error(err.message);
+      console.error('Replicator::main error:', err);
     }
 
     if (!this.running) {

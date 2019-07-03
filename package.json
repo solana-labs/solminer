@@ -36,6 +36,7 @@
     "electron-log": "^3.0.6",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^4.0.0",
+    "fkill": "^6.2.0",
     "immutable": "^4.0.0-rc.12",
     "javascript-terminal": "^1.0.3",
     "jsonfile": "^5.0.0",
