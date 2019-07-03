@@ -371,7 +371,8 @@ class App extends React.Component {
               </Grid>
               <Grid item xs>
                 <Typography variant="caption" noWrap>
-                  Total mined Lamports: {this.state.totalMined + this.state.newMined}
+                  Total mined Lamports:{' '}
+                  {this.state.totalMined + this.state.newMined}
                 </Typography>
               </Grid>
               <Grid item xs>

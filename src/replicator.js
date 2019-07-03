@@ -1,6 +1,7 @@
 import log from 'electron-log';
 import {spawn} from 'promisify-child-process';
 import path from 'path';
+import os from 'os';
 import electron from 'electron';
 import jsonfile from 'jsonfile';
 import fkill from 'fkill';
@@ -168,9 +169,17 @@ export class Replicator {
     try {
       // Ensure nothing is lingering in the background
       try {
-        await fkill(['solana-install', 'solana-replicator', 'solana-wallet'], {
-          force: true,
-        });
+        const dotExe = os.type() === 'Windows_NT' ? '.exe' : '';
+        await fkill(
+          [
+            `solana-install${dotExe}`,
+            `solana-replicator${dotExe}`,
+            `solana-wallet${dotExe}`,
+          ],
+          {
+            force: true,
+          },
+        );
       } catch (err) {
         log.debug('fkill errored with:', err);
       }
