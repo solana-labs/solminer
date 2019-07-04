@@ -67,7 +67,9 @@ async function main() {
         'solana-install-init-x86_64-apple-darwin',
         'solana-install-init',
       );
-      fs.chmodSync('solana-install-init', 0o555);
+      // Set user write bit so that ShipIt can remove the quarantine attribute
+      // after unzipping an update archive, otherwise the update fails
+      fs.chmodSync('solana-install-init', 0o755);
       break;
     case 'Linux':
       download(
