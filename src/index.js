@@ -7,6 +7,7 @@ import path from 'path';
 import os from 'os';
 import log from 'electron-log';
 import './updater';
+import {Replicator} from './replicator';
 import {sleep} from './sleep';
 
 // eslint-disable-next-line global-require
@@ -42,8 +43,9 @@ function shutdown() {
       shutdownComplete = true;
       app.quit();
     });
-    sleep(10000).then(() => {
+    sleep(5000).then(async () => {
       console.log('shutdown: timeout waiting for replicator to stop');
+      await Replicator.fkill(); // Fail-safe to ensure child processes are killed
       shutdownComplete = true;
       app.quit();
     });

@@ -304,7 +304,7 @@ class App extends React.Component {
                       color="primary"
                     />
                   }
-                  label="Enable"
+                  label="Enabled"
                 />
               </FormGroup>
               <p />

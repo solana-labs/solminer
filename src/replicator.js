@@ -53,6 +53,25 @@ export class Replicator {
     });
   }
 
+  static async fkill() {
+    // Ensure nothing is lingering in the background
+    try {
+      const dotExe = os.type() === 'Windows_NT' ? '.exe' : '';
+      await fkill(
+        [
+          `solana-install${dotExe}`,
+          `solana-replicator${dotExe}`,
+          `solana-wallet${dotExe}`,
+        ],
+        {
+          force: true,
+        },
+      );
+    } catch (err) {
+      log.debug('fkill errored with:', err);
+    }
+  }
+
   async start() {
     if (this.running) {
       log.warn('Replicator already running, ignoring start()');
@@ -212,22 +231,7 @@ export class Replicator {
     const solanaWallet = `${this.solanaInstallBinDir}/solana-wallet`;
 
     try {
-      // Ensure nothing is lingering in the background
-      try {
-        const dotExe = os.type() === 'Windows_NT' ? '.exe' : '';
-        await fkill(
-          [
-            `solana-install${dotExe}`,
-            `solana-replicator${dotExe}`,
-            `solana-wallet${dotExe}`,
-          ],
-          {
-            force: true,
-          },
-        );
-      } catch (err) {
-        log.debug('fkill errored with:', err);
-      }
+      await Replicator.fkill();
 
       await this.cmd(solanaInstallInit, [
         '--config',
