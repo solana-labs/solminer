@@ -75,7 +75,7 @@ app.on('ready', async () => {
   mainWindow.loadURL(`file://${__dirname}/index.html`);
 
   if (os.type() === 'Darwin') {
-    // macOS Cut/Copy/Paste doesn't work with an Edit menu...
+    // macOS Cut/Copy/Paste doesn't work without an Edit menu...
     Menu.setApplicationMenu(
       Menu.buildFromTemplate([
         {
