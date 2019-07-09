@@ -354,10 +354,10 @@
   dependencies:
     "@babel/runtime" "^7.2.0"
 
-"@material-ui/lab@^4.0.0-alpha.18":
-  version "4.0.0-alpha.18"
-  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-4.0.0-alpha.18.tgz#e1b8f51d177190f8431b1d07da9f78f560727ac8"
-  integrity sha512-YdsKIyTTZPQ5w4oWflTYBFbrdzN6nx6qqzgIw10Gkjsk5MZronOyxMx+HRxPtgmtsgXudlA7v4JqptSWl5Pxug==
+"@material-ui/lab@^4.0.0-alpha.19":
+  version "4.0.0-alpha.19"
+  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-4.0.0-alpha.19.tgz#265eb0e136271f3866a3ab71670141cd440c8cfe"
+  integrity sha512-DexeQ18rYF8s6RkTentk3IQd2l3Wmh1owHenPa7kNYfzJkZoiOKS+WRVPI8v/LGyNHcWHVjZ80+9sNRp6b9BTQ==
   dependencies:
     "@babel/runtime" "^7.2.0"
     "@material-ui/utils" "^4.1.0"
