@@ -4,7 +4,7 @@ set -ex
 
 npm run lint
 
-if ! $TRAVIS_PULL_REQUEST && [[ $TRAVIS_OS_NAME = osx ]]; then
+if [[ $TRAVIS_PULL_REQUEST = false && $TRAVIS_OS_NAME = osx ]]; then
   security create-keychain -p mynotsecretpassword build.keychain
   security default-keychain -s build.keychain
   security unlock-keychain -p mynotsecretpassword
