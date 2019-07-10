@@ -5,7 +5,7 @@ import log from 'electron-log';
 try {
   updateElectronApp({
     logger: log,
-    nagUser: false,
+    notifyUser: false,
   });
 } catch (err) {
   log.error(`Unable to enable updates: ${err}`);
