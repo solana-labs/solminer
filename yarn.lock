@@ -3105,10 +3105,10 @@ console-control-strings@^1.0.0, console-control-strings@^1.1.0, console-control-
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
   integrity sha1-PXz0Rk22RG6mRL9LOVB/mFEAjo4=
 
-console-feed@^2.8.8:
-  version "2.8.8"
-  resolved "https://registry.yarnpkg.com/console-feed/-/console-feed-2.8.8.tgz#c02054e8b1ae4c4562d4d7539aee83a426c9b1bb"
-  integrity sha512-tqONbPYrolH9Gn8yMc+7sBZG9F9FkNJM68ziG5dInznBOHbHNua+Mq0S70EgvkhEpE9AifvV9d7EX2Jm5yDw2w==
+console-feed@^2.8.10:
+  version "2.8.10"
+  resolved "https://registry.yarnpkg.com/console-feed/-/console-feed-2.8.10.tgz#a4f215f7972d8855b379fa2e4f31248d5f5a578b"
+  integrity sha512-n1WeWsFUTcVptTR3c9/RYkrH9wVC+X4aEF9WpfKcmDdLorcdEk/N4gO+hdNkBYIzXyWQi2NoFBZTWsOFww4vaQ==
   dependencies:
     emotion "^9.1.1"
     emotion-theming "^9.0.0"

@@ -30,7 +30,7 @@
     "@material-ui/lab": "^4.0.0-alpha.19",
     "@solana/web3.js": "^0.17.2",
     "autoscroll-react": "^3.2.0",
-    "console-feed": "^2.8.8",
+    "console-feed": "^2.8.10",
     "electron-compile": "^6.4.4",
     "electron-devtools-installer": "^2.1.0",
     "electron-log": "^3.0.6",
