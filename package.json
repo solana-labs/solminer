@@ -74,7 +74,7 @@
     "eslint-plugin-react": "^7",
     "got": "^9.6.0",
     "prettier": "^1.18.2",
-    "semantic-release": "^15.13.18"
+    "semantic-release": "^15.13.19"
   },
   "optionalDependencies": {
     "appdmg": "^0.6.0"
