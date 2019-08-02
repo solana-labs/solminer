@@ -28,7 +28,7 @@
     "@material-ui/core": "^4.3.0",
     "@material-ui/icons": "^4.2.1",
     "@material-ui/lab": "^4.0.0-alpha.19",
-    "@solana/web3.js": "^0.18.4",
+    "@solana/web3.js": "^0.18.5",
     "autoscroll-react": "^3.2.0",
     "console-feed": "^2.8.10",
     "electron-compile": "^6.4.4",
