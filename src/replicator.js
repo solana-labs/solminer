@@ -13,6 +13,7 @@ import {
 import fs from 'mz/fs';
 import {solanaInstallInit} from './solana-install-init';
 import {sleep} from './sleep';
+import {url} from './url';
 
 // TODO: https://github.com/solana-labs/solana/issues/4344
 const airdropAmount = 100000;
@@ -230,6 +231,11 @@ export class Replicator {
     const solanaInstall = `${this.solanaInstallBinDir}/solana-install`;
     const solanaWallet = `${this.solanaInstallBinDir}/solana-wallet`;
 
+    const gossipEntrypoint = (() => {
+      const u = new URL(url);
+      return `${u.hostname}:8001`;
+    })();
+
     try {
       await Replicator.fkill();
 
@@ -239,6 +245,8 @@ export class Replicator {
         '--data-dir',
         this.solanaInstallDataDir,
         '--no-modify-path',
+        '--url',
+        url,
       ]);
 
       const newReplicatorKeypair = await this.maybeGenerateKeypair(
@@ -268,6 +276,8 @@ export class Replicator {
       );
       if (replicatorStartingBalance < airdropAmount) {
         await this.cmd(solanaWallet, [
+          '--url',
+          url,
           '--keypair',
           this.replicatorKeypairFile,
           'airdrop',
@@ -277,6 +287,8 @@ export class Replicator {
 
       if (newStorageKeypair) {
         await this.cmd(solanaWallet, [
+          '--url',
+          url,
           '--keypair',
           this.replicatorKeypairFile,
           'create-replicator-storage-account',
@@ -286,6 +298,8 @@ export class Replicator {
       }
 
       await this.cmd(solanaWallet, [
+        '--url',
+        url,
         '--keypair',
         this.replicatorKeypairFile,
         'show-storage-account',
@@ -299,7 +313,7 @@ export class Replicator {
         'solana-replicator',
         '--',
         '--entrypoint',
-        'testnet.solana.com:8001',
+        gossipEntrypoint,
         '--identity',
         this.replicatorKeypairFile,
         '--storage-keypair',
