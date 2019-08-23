@@ -62,7 +62,7 @@ export class Replicator {
         [
           `solana-install${dotExe}`,
           `solana-replicator${dotExe}`,
-          `solana-wallet${dotExe}`,
+          `solana${dotExe}`,
         ],
         {
           force: true,
@@ -229,7 +229,7 @@ export class Replicator {
    */
   async main() {
     const solanaInstall = `${this.solanaInstallBinDir}/solana-install`;
-    const solanaWallet = `${this.solanaInstallBinDir}/solana-wallet`;
+    const solanaCli = `${this.solanaInstallBinDir}/solana`;
 
     const gossipEntrypoint = (() => {
       const u = new URL(url);
@@ -275,7 +275,7 @@ export class Replicator {
         this.replicatorKeypair.publicKey,
       );
       if (replicatorStartingBalance < airdropAmount) {
-        await this.cmd(solanaWallet, [
+        await this.cmd(solanaCli, [
           '--url',
           url,
           '--keypair',
@@ -286,7 +286,7 @@ export class Replicator {
       }
 
       if (newStorageKeypair) {
-        await this.cmd(solanaWallet, [
+        await this.cmd(solanaCli, [
           '--url',
           url,
           '--keypair',
@@ -297,7 +297,7 @@ export class Replicator {
         ]);
       }
 
-      await this.cmd(solanaWallet, [
+      await this.cmd(solanaCli, [
         '--url',
         url,
         '--keypair',
