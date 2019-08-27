@@ -245,8 +245,7 @@ export class Replicator {
         '--data-dir',
         this.solanaInstallDataDir,
         '--no-modify-path',
-        '--url',
-        url,
+        '0.18.0-pre2'
       ]);
 
       const newReplicatorKeypair = await this.maybeGenerateKeypair(
