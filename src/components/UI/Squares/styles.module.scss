@@ -1,0 +1,15 @@
+.squares {
+  margin-top: 14px;
+  span {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    &:first-child {
+      margin-right: 8px;
+      background: #00A771;
+    }
+    &:last-child {
+      background: #C2C1C2;
+    }
+  }
+}

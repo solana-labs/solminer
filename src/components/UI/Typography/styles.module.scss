@@ -1,0 +1,23 @@
+@import "~styles/vars";
+
+.title {
+  font-weight: bold;
+  font-size: $title-font-size;
+  line-height: 1.34;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+}
+
+.subttl {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: $subttl-font-size;
+  line-height: 1.4;
+  color: $subttl-color;
+  letter-spacing: 2px;
+}
+
+.cardTitle {
+  @extend .subttl;
+  color: $card-title-color;
+}

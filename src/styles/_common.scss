@@ -1,0 +1,14 @@
+body {
+  background-color: $black;
+  font-size: $base-font-size;
+  font-family: $font-family;
+  color: $base-color;
+}
+
+.container {
+  padding: 0 60px;
+}
+
+strong {
+  font-weight: bold;
+}

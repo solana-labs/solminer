@@ -1,0 +1,14 @@
+@import "~styles/vars";
+
+.root {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: bold;
+  color: $help-icon-color;
+  border: 1px solid $help-icon-color;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

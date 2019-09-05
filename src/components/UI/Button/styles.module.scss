@@ -1,0 +1,18 @@
+@import '~styles/vars';
+
+.root {
+  display: inline-block;
+  border: 1px solid $primary;
+  padding: 5px;
+}
+.btn {
+  border: none;
+  height: 48px;
+  background-color: $primary;
+  text-transform: uppercase;
+  color: $black;
+  font-weight: bold;
+  font-size: 15px;
+  letter-spacing: 2.5px;
+  min-width: 196px;
+}
