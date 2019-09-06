@@ -1,7 +1,7 @@
-// @noflow
+import { testnetChannelEndpoint } from '@solana/web3.js';
 
-import {testnetChannelEndpoint} from '@solana/web3.js';
-
-export const url = !process.env.LOCAL
-  ? testnetChannelEndpoint(process.env.CHANNEL || 'stable', false)
+const url = !process.env.LOCAL
+  ? testnetChannelEndpoint(process.env.CHANNEL || 'beta', false)
   : 'http://localhost:8899';
+
+export default url;
