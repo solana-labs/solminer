@@ -10,9 +10,10 @@ import {
   Account,
   SystemProgram,
 } from '@solana/web3.js';
-import fs from 'mz/fs';
+import fs from 'fs';
 import {solanaInstallInit} from './solana-install-init';
 import {sleep} from './sleep';
+import { AppStore } from './store';
 import {url} from './url';
 
 // TODO: https://github.com/solana-labs/solana/issues/4344
@@ -91,6 +92,7 @@ export class Replicator {
     console.warn('^C');
     this.cmdCancel();
     await this.mainPromise;
+    AppStore.setState('disabled');
   }
 
   async clusterRestart() {
@@ -166,7 +168,7 @@ export class Replicator {
     }
     console.log(`$ ${command} ${args.join(' ')}`);
     log.info(`$ ${command} ${args.join(' ')}`);
-    const env = Object.assign({}, {RUST_LOG: 'solana=info'}, process.env);
+    const env = { RUST_LOG: 'solana=info', ...process.env };
     const child = spawn(command, args, {env});
     log.info(`pid ${child.pid}`);
 
@@ -237,13 +239,14 @@ export class Replicator {
     })();
 
     try {
+      AppStore.setState('loading');
       await Replicator.fkill();
 
       await this.cmd(solanaInstallInit, [
         '--config',
-        this.solanaInstallConfig,
+        `"${this.solanaInstallConfig}"`,
         '--data-dir',
-        this.solanaInstallDataDir,
+        `"${this.solanaInstallDataDir}"`,
         '--no-modify-path',
         '--url',
         url,
@@ -305,7 +308,7 @@ export class Replicator {
         'show-storage-account',
         storageKeypair.publicKey.toString(),
       ]);
-
+      AppStore.setState('download');
       await this.cmd(solanaInstall, [
         '--config',
         this.solanaInstallConfig,
@@ -321,8 +324,10 @@ export class Replicator {
         '--ledger',
         this.replicatorLedgerDir,
       ]);
+      AppStore.setState('running');
     } catch (err) {
       console.error('Replicator::main error:', err);
+      AppStore.setState('disabled');
     }
 
     if (!this.running) {
