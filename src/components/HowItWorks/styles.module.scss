@@ -1,0 +1,27 @@
+@import "~styles/vars";
+
+.root {
+  display: flex;
+  align-items: center;
+}
+
+.left {
+  margin-right: 61px;
+}
+
+.title {
+  margin-bottom: 49px;
+}
+
+.subttl {
+  margin-bottom: 25px;
+}
+
+.desc {
+  margin-top: -10px;
+  margin-bottom: 40px;
+}
+
+.newWallet {
+  margin-top: 50px;
+}

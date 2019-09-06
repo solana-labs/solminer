@@ -1,0 +1,23 @@
+@import "~styles/vars";
+
+.root {
+  display: flex;
+  align-items: center;
+}
+
+.left {
+  margin-right: 61px;
+}
+
+.title {
+  margin-bottom: 49px;
+}
+
+.list {
+  margin-bottom: 55px;
+  a {
+    color: $primary;
+    font-weight: bold;
+    text-decoration: none;
+  }
+}

@@ -1,0 +1,29 @@
+@import "~styles/vars";
+
+.root {
+  background: $alert-background;
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.body {
+  font-size: 15px;
+  line-height: 1.33;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: $white;
+  letter-spacing: 2.5px;
+  &.error {
+    color: $pink;
+  }
+}
+
+.icon {
+  margin-right: 17px;
+}
+.close {
+  border: none;
+  background: none;
+}
