@@ -1,15 +1,8 @@
 {
-  "presets": [
-    "env",
-    "flow",
-    "react",
-    "stage-2",
-  ],
+  "presets": ["@babel/preset-env", "@babel/react"],
   "plugins": [
-    "transform-async-to-generator",
-    "transform-class-properties",
-    "transform-es2015-classes",
-    "transform-function-bind",
-    "transform-object-rest-spread",
+    "react-hot-loader/babel",
+    ["@babel/plugin-proposal-decorators", { "legacy": true}],
+    ["@babel/plugin-proposal-class-properties", { "loose": true}]
   ]
 }
