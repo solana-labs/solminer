@@ -59,13 +59,13 @@ async function main() {
     case 'Windows_NT':
       download(
         'solana-install-init-x86_64-pc-windows-msvc.exe',
-        'solana-install-init.exe',
+        'solana-install-init.exe'
       );
       break;
     case 'Darwin':
       download(
         'solana-install-init-x86_64-apple-darwin',
-        'solana-install-init',
+        'solana-install-init'
       );
       // Set user write bit so that ShipIt can remove the quarantine attribute
       // after unzipping an update archive, otherwise the update fails
@@ -74,7 +74,7 @@ async function main() {
     case 'Linux':
       download(
         'solana-install-init-x86_64-unknown-linux-gnu',
-        'solana-install-init',
+        'solana-install-init'
       );
       fs.chmodSync('solana-install-init', 0o555);
       break;

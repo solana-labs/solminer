@@ -1,4 +1,4 @@
-import {autoUpdater} from 'electron';
+import { autoUpdater } from 'electron';
 import updateElectronApp from 'update-electron-app';
 import log from 'electron-log';
 
