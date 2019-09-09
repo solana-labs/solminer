@@ -35,7 +35,7 @@
     "electron-devtools-installer": "^2.1.0",
     "electron-log": "^3.0.7",
     "electron-squirrel-startup": "^1.0.0",
-    "electron-store": "^4.0.0",
+    "electron-store": "^5.0.0",
     "fkill": "^6.2.0",
     "immutable": "^4.0.0-rc.12",
     "javascript-terminal": "^1.0.3",
