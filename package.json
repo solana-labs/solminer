@@ -34,6 +34,7 @@
     "electron-compile": "^6.4.4",
     "electron-devtools-installer": "^2.1.0",
     "electron-log": "^3.0.7",
+    "electron-notarize": "^0.1.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^5.0.0",
     "fkill": "^6.2.0",
