@@ -1,3 +1,9 @@
+/* eslint no-console: ["error", { allow: ["log", "warn", "info", "error"] }] */
+/* eslint max-classes-per-file: 0 */
+/* eslint react/prefer-stateless-function: 0 */
+/* eslint react/destructuring-assignment: 0 */
+/* eslint react/sort-comp: 0 */
+
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -11,16 +17,16 @@ import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import log from 'electron-log';
-import {Connection, PublicKey} from '@solana/web3.js';
-import {withStyles} from '@material-ui/core/styles';
+import { Connection, PublicKey } from '@solana/web3.js';
+import { withStyles } from '@material-ui/core/styles';
 import Store from 'electron-store';
 import IconButton from '@material-ui/core/IconButton';
 import SaveIcon from '@material-ui/icons/Save';
 import autoscroll from 'autoscroll-react';
-import {Hook, Console, Decode} from 'console-feed';
+import { Hook, Console, Decode } from 'console-feed';
 
-import {url} from './url';
-import {Replicator} from './replicator';
+import url from './url';
+import Replicator from './replicator';
 
 const styles = theme => ({
   root: {
@@ -69,7 +75,7 @@ class LogConsole extends React.Component {
           overflowY: 'hidden',
         }}
       >
-        <div style={{width: '1000%'}}>
+        <div style={{ width: '1000%' }}>
           <Console logs={this.props.logs} variant="dark" />
         </div>
       </div>
@@ -110,13 +116,13 @@ class App extends React.Component {
     Hook(console, newLog => {
       const decodeLog = Decode(newLog);
       log.info('term:', decodeLog.data[0]);
-      const {logs} = this.state;
+      const { logs } = this.state;
       logs.push(decodeLog);
       const max = 20;
       if (logs.length > max) {
         logs.splice(0, logs.length - max);
       }
-      this.setState({logs});
+      this.setState({ logs });
     });
     this.connection = new Connection(url);
 
@@ -139,7 +145,7 @@ class App extends React.Component {
   }
 
   clearTerminal() {
-    this.setState({logs: []});
+    this.setState({ logs: [] });
   }
 
   clusterRestart() {
@@ -157,7 +163,7 @@ class App extends React.Component {
 
       if (transactionCount < this.state.transactionCount / 2) {
         console.warn(
-          `Transaction count decreased from ${this.state.transactionCount} to ${transactionCount}`,
+          `Transaction count decreased from ${this.state.transactionCount} to ${transactionCount}`
         );
         this.clusterRestart();
         return;
@@ -165,13 +171,13 @@ class App extends React.Component {
 
       const totalSupply = await this.connection.getTotalSupply();
       const newMined = await this.replicator.adjustedReplicatorBalance();
-      let totalMined = this.state.totalMined;
+      let { totalMined } = this.state;
 
       if (newMined > this.state.depositMinimumLamports) {
         if (isValidPublicKey(this.depositPublicKey)) {
           const success = await this.replicator.depositMiningRewards(
             new PublicKey(this.depositPublicKey),
-            newMined,
+            newMined
           );
           if (success) {
             totalMined += newMined;
@@ -184,12 +190,12 @@ class App extends React.Component {
       if (isValidPublicKey(this.depositPublicKey)) {
         try {
           const balance = await this.connection.getBalance(
-            new PublicKey(this.depositPublicKey),
+            new PublicKey(this.depositPublicKey)
           );
           depositPublicKeyBalance = `Account Balance: ${balance} lamports`;
         } catch (err) {
           log.warn(
-            `Unable to getBalance of ${this.depositPublicKey}: ${err.message}`,
+            `Unable to getBalance of ${this.depositPublicKey}: ${err.message}`
           );
         }
       }
@@ -209,7 +215,7 @@ class App extends React.Component {
   onEnabledSwitch = event => {
     const enabled = event.target.checked;
     this.store.set('enabled', enabled);
-    this.setState({enabled});
+    this.setState({ enabled });
     if (enabled) {
       this.clearTerminal();
       this.replicator.start();
@@ -223,7 +229,7 @@ class App extends React.Component {
 
     const unsavedDepositPublicKey = event.target.value;
     const unsavedDepositPublicKeyValid = isValidPublicKey(
-      unsavedDepositPublicKey,
+      unsavedDepositPublicKey
     );
     const unsavedDepositPublicKeySavePrompt =
       unsavedDepositPublicKeyValid &&
@@ -265,7 +271,7 @@ class App extends React.Component {
   };
 
   render() {
-    const {classes} = this.props;
+    const { classes } = this.props;
 
     const AutoscrollLogConsole = autoscroll(LogConsole, {
       isScrolledDownThreshold: 0,
@@ -273,7 +279,7 @@ class App extends React.Component {
 
     // eslint-disable-next-line no-restricted-properties
     const totalSupplySOL = (this.state.totalSupply / Math.pow(2, 34)).toFixed(
-      2,
+      2
     );
 
     return (
@@ -283,7 +289,7 @@ class App extends React.Component {
           <Grid container spacing={0}>
             <Grid
               item
-              style={{display: 'flex', alignItems: 'center'}}
+              style={{ display: 'flex', alignItems: 'center' }}
               xs={10}
               sm={5}
             >

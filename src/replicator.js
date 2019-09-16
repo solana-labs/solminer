@@ -1,5 +1,8 @@
+/* eslint no-console: ["error", { allow: ["log", "warn", "info", "error"] }] */
+/* eslint react/destructuring-assignment: 0 */
+
 import log from 'electron-log';
-import {spawn} from 'promisify-child-process';
+import { spawn } from 'promisify-child-process';
 import path from 'path';
 import os from 'os';
 import electron from 'electron';
@@ -11,14 +14,14 @@ import {
   SystemProgram,
 } from '@solana/web3.js';
 import fs from 'mz/fs';
-import {solanaInstallInit} from './solana-install-init';
-import {sleep} from './sleep';
-import {url} from './url';
+import solanaInstallInit from './solana-install-init';
+import sleep from './sleep';
+import url from './url';
 
 // TODO: https://github.com/solana-labs/solana/issues/4344
 const airdropAmount = 100000;
 
-export class Replicator {
+export default class Replicator {
   constructor(connection) {
     const userDataPath = electron.remote.app.getPath('userData');
 
@@ -32,7 +35,7 @@ export class Replicator {
         userDataPath,
         'install',
         'active_release',
-        'bin',
+        'bin'
       ),
       replicatorKeypair: null,
       replicatorKeypairFile: path.join(userDataPath, 'replicator-keypair.json'),
@@ -66,7 +69,7 @@ export class Replicator {
         ],
         {
           force: true,
-        },
+        }
       );
     } catch (err) {
       log.debug('fkill errored with:', err);
@@ -105,11 +108,11 @@ export class Replicator {
     if (this.replicatorKeypair !== null) {
       try {
         const realBalance = await this.connection.getBalance(
-          this.replicatorKeypair.publicKey,
+          this.replicatorKeypair.publicKey
         );
         const adjustedBalance = Math.max(0, realBalance - airdropAmount);
         log.info(
-          `adjustedReplicatorBalance: real=${realBalance} adjusted=${adjustedBalance}`,
+          `adjustedReplicatorBalance: real=${realBalance} adjusted=${adjustedBalance}`
         );
         return adjustedBalance;
       } catch (err) {
@@ -130,26 +133,26 @@ export class Replicator {
 
     try {
       log.info(
-        `depositMiningRewards: ${amount} lamports to ${destinationPublicKey}`,
+        `depositMiningRewards: ${amount} lamports to ${destinationPublicKey}`
       );
       const transaction = SystemProgram.transfer(
         this.replicatorKeypair.publicKey,
         destinationPublicKey,
-        amount,
+        amount
       );
       const signature = await sendAndConfirmTransaction(
         this.connection,
         transaction,
-        this.replicatorKeypair,
+        this.replicatorKeypair
       );
       console.info(
-        `Deposited mining rewards (${amount} lamports).  Transaction signature: ${signature}`,
+        `Deposited mining rewards (${amount} lamports).  Transaction signature: ${signature}`
       );
       return true;
     } catch (err) {
       console.error(
         `Deposit mining rewards failed (${amount} lamports):`,
-        err.message,
+        err.message
       );
       return false;
     } finally {
@@ -166,8 +169,8 @@ export class Replicator {
     }
     console.log(`$ ${command} ${args.join(' ')}`);
     log.info(`$ ${command} ${args.join(' ')}`);
-    const env = Object.assign({}, {RUST_LOG: 'solana=info'}, process.env);
-    const child = spawn(command, args, {env});
+    const env = { RUST_LOG: 'solana=info', ...process.env };
+    const child = spawn(command, args, { env });
     log.info(`pid ${child.pid}`);
 
     function logData(data) {
@@ -210,7 +213,7 @@ export class Replicator {
       try {
         await fs.access(keypairFile, fs.constants.R_OK);
         const keypair = new Account(
-          Buffer.from(jsonfile.readFileSync(keypairFile)),
+          Buffer.from(jsonfile.readFileSync(keypairFile))
         );
         const balance = await this.connection.getBalance(keypair.publicKey);
         if (balance > 0) {
@@ -250,29 +253,29 @@ export class Replicator {
       ]);
 
       const newReplicatorKeypair = await this.maybeGenerateKeypair(
-        this.replicatorKeypairFile,
+        this.replicatorKeypairFile
       );
       const newStorageKeypair = await this.maybeGenerateKeypair(
         this.storageKeypairFile,
-        newReplicatorKeypair,
+        newReplicatorKeypair
       );
 
       console.info(`identity keypair: ${this.replicatorKeypairFile}`);
       console.info(`storage keypair: ${this.storageKeypairFile}`);
 
       const replicatorKeypair = new Account(
-        Buffer.from(jsonfile.readFileSync(this.replicatorKeypairFile)),
+        Buffer.from(jsonfile.readFileSync(this.replicatorKeypairFile))
       );
       this.replicatorKeypair = replicatorKeypair;
       const storageKeypair = new Account(
-        Buffer.from(jsonfile.readFileSync(this.storageKeypairFile)),
+        Buffer.from(jsonfile.readFileSync(this.storageKeypairFile))
       );
 
       console.info(`identity pubkey: ${replicatorKeypair.publicKey}`);
       console.info(`storage pubkey: ${storageKeypair.publicKey}`);
 
       const replicatorStartingBalance = await this.connection.getBalance(
-        this.replicatorKeypair.publicKey,
+        this.replicatorKeypair.publicKey
       );
       if (replicatorStartingBalance < airdropAmount) {
         await this.cmd(solanaCli, [
