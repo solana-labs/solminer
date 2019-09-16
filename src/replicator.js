@@ -10,15 +10,15 @@ import {
   Account,
   SystemProgram,
 } from '@solana/web3.js';
-import fs from 'mz/fs';
-import {solanaInstallInit} from './solana-install-init';
-import {sleep} from './sleep';
-import {url} from './url';
+import fs from 'fs';
+import solanaInstallInit from './solana-install-init';
+import sleep from './sleep';
+import url from './url';
 
 // TODO: https://github.com/solana-labs/solana/issues/4344
 const airdropAmount = 100000;
 
-export class Replicator {
+class Replicator {
   constructor(connection) {
     const userDataPath = electron.remote.app.getPath('userData');
 
@@ -241,9 +241,9 @@ export class Replicator {
 
       await this.cmd(solanaInstallInit, [
         '--config',
-        this.solanaInstallConfig,
+        `"${this.solanaInstallConfig}"`,
         '--data-dir',
-        this.solanaInstallDataDir,
+        `"${this.solanaInstallDataDir}"`,
         '--no-modify-path',
         '--url',
         url,
@@ -335,3 +335,5 @@ export class Replicator {
     return this.main();
   }
 }
+
+export default Replicator;
