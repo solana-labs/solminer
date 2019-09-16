@@ -241,9 +241,9 @@ export class Replicator {
 
       await this.cmd(solanaInstallInit, [
         '--config',
-        this.solanaInstallConfig,
+        `"${this.solanaInstallConfig}"`,
         '--data-dir',
-        this.solanaInstallDataDir,
+        `"${this.solanaInstallDataDir}"`,
         '--no-modify-path',
         '--url',
         url,
