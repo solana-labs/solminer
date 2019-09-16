@@ -1,4 +1,6 @@
-import {app, ipcMain, BrowserWindow, Menu} from 'electron';
+/* eslint no-console: ["error", { allow: ["log", "warn", "info", "error"] }] */
+
+import { app, ipcMain, BrowserWindow, Menu } from 'electron';
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer';
@@ -7,8 +9,8 @@ import path from 'path';
 import os from 'os';
 import log from 'electron-log';
 import './updater';
-import {Replicator} from './replicator';
-import {sleep} from './sleep';
+import Replicator from './replicator';
+import sleep from './sleep';
 
 // eslint-disable-next-line global-require
 if (require('electron-squirrel-startup')) app.quit();
@@ -91,12 +93,12 @@ app.on('ready', async () => {
         {
           label: 'Edit',
           submenu: [
-            {label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:'},
-            {label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:'},
-            {label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:'},
+            { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
+            { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
+            { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
           ],
         },
-      ]),
+      ])
     );
   }
 

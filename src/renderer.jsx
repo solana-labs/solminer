@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {AppContainer} from 'react-hot-loader';
+import { AppContainer } from 'react-hot-loader';
 import App from './app';
 import pkg from '../package.json';
 
@@ -11,7 +11,7 @@ const render = () => {
     <AppContainer>
       <App />
     </AppContainer>,
-    document.getElementById('App'),
+    document.getElementById('App')
   );
 };
 
