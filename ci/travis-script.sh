@@ -2,6 +2,10 @@
 
 set -ex
 
+if [[ $TRAVIS_PULL_REQUEST != false ]]; then
+  npx commitlint-travis
+fi
+
 npm run lint
 
 if [[ $TRAVIS_PULL_REQUEST = false && $TRAVIS_OS_NAME = osx ]]; then
