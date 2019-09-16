@@ -21,29 +21,65 @@ const electronWinstallerConfig = {
 }
 
 module.exports = {
-  make_targets: {
-    win32: ['squirrel'],
-    darwin: ['zip', 'dmg'],
-    linux: ['deb', 'rpm'],
-  },
-  electronPackagerConfig: {
+  packagerConfig: {
     packageManager: 'yarn',
     icon: 'src/images/icon/solminer',
     extraResource: solanaInstallInit,
     osxSign: !!process.env.TRAVIS, // Only sign if running on Travis CI
   },
-  electronWinstallerConfig,
-  electronInstallerDMG: {
-    icon: 'src/images/icon/solminer.icns',
-  },
-  electronInstallerDebian: {},
-  electronInstallerRedhat: {},
-  github_repository: {
-    owner: 'solana-labs',
-    name: 'solminer',
-  },
-  windowsStoreConfig: {
-    packageName: '',
-    name: 'solminer',
-  },
+  makers: [
+    {
+      name: '@electron-forge/maker-squirrel',
+      config: {
+        ...electronWinstallerConfig,
+      },
+    },
+    {
+      name: '@electron-forge/maker-zip',
+      platforms: ['darwin'],
+    },
+    {
+      name: '@electron-forge/maker-dmg',
+      config: {
+        icon: 'src/images/icon/solminer.icns',
+      },
+    },
+    {
+      name: '@electron-forge/maker-deb',
+      config: {},
+    },
+    {
+      name: '@electron-forge/maker-rpm',
+      config: {},
+    },
+  ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'solana-labs',
+          name: 'solminer',
+        },
+      },
+    },
+  ],
+  plugins: [
+    [
+      '@electron-forge/plugin-webpack',
+      {
+        mainConfig: './webpack.main.config.js',
+        renderer: {
+          config: './webpack.renderer.config.js',
+          entryPoints: [
+            {
+              html: './src/index.html',
+              js: './src/renderer.jsx',
+              name: 'main_window',
+            },
+          ],
+        },
+      },
+    ],
+  ],
 };

@@ -2,7 +2,7 @@ import {app, ipcMain, BrowserWindow, Menu} from 'electron';
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer';
-import {enableLiveReload} from 'electron-compile';
+
 import path from 'path';
 import os from 'os';
 import log from 'electron-log';
@@ -19,7 +19,6 @@ app.setPath('userData', path.join(app.getPath('appData'), app.getName()));
 log.info('userData:', app.getPath('userData'));
 
 const isDevMode = process.execPath.match(/[\\/]electron/);
-if (isDevMode) enableLiveReload({strategy: 'react-hmr'});
 
 let mainWindow = null;
 let shutdownInProgress = false;
@@ -72,7 +71,8 @@ app.on('ready', async () => {
     },
   });
 
-  mainWindow.loadURL(`file://${__dirname}/index.html`);
+  /* global MAIN_WINDOW_WEBPACK_ENTRY */
+  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   if (os.type() === 'Darwin') {
     // macOS Cut/Copy/Paste doesn't work without an Edit menu...
