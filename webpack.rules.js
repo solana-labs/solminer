@@ -1,3 +1,5 @@
+const sass = require('sass');
+
 module.exports = [
   {
     test: /\.node$/,
@@ -39,6 +41,12 @@ module.exports = [
           modules: {
             localIdentName: '[local]___[hash:base64:5]',
           },
+        },
+      },
+      {
+        loader: 'sass-loader',
+        options: {
+          implementation: sass,
         },
       },
     ],
