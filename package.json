@@ -42,7 +42,7 @@
     "electron-devtools-installer": "^2.2.4",
     "electron-log": "^3.0.8",
     "electron-squirrel-startup": "^1.0.0",
-    "electron-store": "^4.0.0",
+    "electron-store": "^5.0.0",
     "fkill": "^6.2.0",
     "generate-function": "^2.3.1",
     "got": "^9.6.0",
