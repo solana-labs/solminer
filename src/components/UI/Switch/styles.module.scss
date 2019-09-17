@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  & > span {
+    margin-right: 5px;
+    text-transform: uppercase;
+    font-size: 12px;
+    line-height: 1.33;
+    letter-spacing: 2.5px;
+  }
+}

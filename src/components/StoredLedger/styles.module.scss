@@ -1,0 +1,22 @@
+@import '~styles/vars';
+
+.title {
+  margin-bottom: 43px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tip {
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: bold;
+  line-height: 1.8;
+  letter-spacing: 3.1px;
+  margin-bottom: 30px;
+}
+
+.close {
+  background: none;
+  border: none;
+}

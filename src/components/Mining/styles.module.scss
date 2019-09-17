@@ -1,0 +1,52 @@
+@import "~styles/vars";
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 42px;
+}
+
+.statusTitle {
+  margin-left: 15px;
+  margin-right: 8px;
+}
+
+.status {
+  text-transform: capitalize;
+}
+
+.switch {
+  margin-left: auto;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -9px;
+  text-align: center;
+  & > div {
+    width: calc(50% - 18px);
+    margin: 0 9px 18px;
+  }
+}
+
+.cardTitle {
+  font-size: 18px;
+  line-height: 1.2;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  & > div {
+    margin-left: 10px;
+  }
+}
+
+.val {
+  font-weight: bold;
+  font-size: 40px;
+  letter-spacing: 3.4px;
+  color: $primary;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

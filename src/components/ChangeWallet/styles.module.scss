@@ -1,0 +1,29 @@
+.title {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.step {
+  margin-bottom: 40px;
+  display: flex;
+  align-items: baseline;
+  & > div:last-child {
+    margin-left: 20px;
+  }
+}
+
+.formTitle {
+  margin-bottom: 23px;
+}
+
+.formHint {
+  margin-top: 23px;
+  margin-bottom: 26px;
+}
+
+.close {
+  background: none;
+  border: none;
+}

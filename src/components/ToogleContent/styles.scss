@@ -1,0 +1,21 @@
+.opacity-enter {
+  opacity: 0.01;
+  visibility: hidden;
+}
+
+.opacity-enter.opacity-enter-active {
+  opacity: 1;
+  transition: .2s;
+  visibility: visible;
+}
+
+.opacity-exit {
+  opacity: 1;
+  visibility: visible;
+}
+
+.opacity-exit.opacity-exit-active {
+  opacity: 0.01;
+  visibility: hidden;
+  transition: .2s;
+}
