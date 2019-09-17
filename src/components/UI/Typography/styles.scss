@@ -1,0 +1,24 @@
+@import '~styles/vars';
+
+b {
+  font-weight: bold;
+}
+.list {
+  li {
+    position: relative;
+    padding-left: 31px;
+    font-size: 18px;
+    line-height: 29px;
+    margin-bottom: 10px;
+    &::before {
+      content: '';
+      display: block;
+      left: 0;
+      top: 8px;
+      width: 15px;
+      height: 15px;
+      background-color: $primary;
+      position: absolute;
+    }
+  }
+}

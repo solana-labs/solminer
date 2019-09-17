@@ -1,0 +1,38 @@
+@import '~styles/vars';
+
+.gigabites {
+  margin-bottom: 23px;
+  font-size: 60px;
+  text-align: right;
+  span {
+    font-weight: bold;
+    color: $primary;
+    letter-spacing: 3.4px;
+  }
+  sup {
+    font-weight: bold;
+    font-size: 18px;
+    text-transform: uppercase;
+    position: relative;
+    top: -5px;
+  }
+}
+
+.slider {
+  margin-bottom: 25px;
+}
+
+.sliderFooter {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2px;
+  font-size: 16px;
+  span {
+    font-weight: 500;
+    line-height: 21px;
+    &:last-child {
+      opacity: 0.3;
+      margin-left: 3px;
+    }
+  }
+}

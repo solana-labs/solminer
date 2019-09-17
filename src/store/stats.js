@@ -1,11 +1,11 @@
 import LocalStore from 'electron-store';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { action, observable, flow } from 'mobx';
+import { DEFAULT_MINIMUM_DEPOSIT_LAMPORTS } from '../constants';
 import url from '../url';
 import Replicator from '../replicator';
 import AppStore from './app';
 
-const DEFAULT_LAMPORTS = 10000;
 const localStore = new LocalStore();
 
 class StatsStore {
@@ -21,7 +21,7 @@ class StatsStore {
     totalSupply: 0,
     depositMinimumLamports: localStore.get(
       'depositMinimumLamports',
-      DEFAULT_LAMPORTS
+      DEFAULT_MINIMUM_DEPOSIT_LAMPORTS
     ),
     depositPublicKeyBalance: '',
   };
