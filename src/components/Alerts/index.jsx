@@ -2,12 +2,14 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { AppStore } from 'store';
 import Alert from 'components/UI/Alert';
+import { Trans } from 'react-i18next';
 import RefreshIcon from '../../images/icon/refresh.svg';
 
 const alertTypes = {
   noInternet: (
     <Alert type="error">
-      Not connected to the internet <RefreshIcon />
+      <Trans i18nKey="alert_no_internet" />
+      <RefreshIcon />
     </Alert>
   ),
 };

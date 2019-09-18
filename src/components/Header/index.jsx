@@ -1,10 +1,12 @@
 import React from 'react';
 import { Logo } from 'components/UI';
+import { useTranslation } from 'react-i18next';
 import { AppStore } from '../../store';
 import ToggleContent from '../ToogleContent';
 import css from './styles.module.scss';
 
 const Header = () => {
+  const { t } = useTranslation();
   const { setScreen, screen } = AppStore;
   const handleChange = hide => () => {
     setScreen('change');
@@ -28,10 +30,10 @@ const Header = () => {
           content={hide => (
             <div className={css.popup}>
               <button type="button" onClick={handleChange(hide)}>
-                Change wallet
+                {t('change_wallet')}
               </button>
               <button type="button" onClick={handleStored(hide)}>
-                Stored ledger
+                {t('stored_ledger')}
               </button>
             </div>
           )}
