@@ -1,6 +1,6 @@
 import LocalStore from 'electron-store';
 import { reaction, action, observable } from 'mobx';
-import i18n from '../i18n/index';
+import i18n from '../i18n';
 
 const localStore = new LocalStore();
 
