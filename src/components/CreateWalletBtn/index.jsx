@@ -2,20 +2,22 @@ import { shell } from 'electron';
 import React from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import css from './styles.module.scss';
 import arrowIcon from '../../images/arrow-right.png';
 
 const CreateWalletBtn = ({ horizontal = false }) => {
+  const { t } = useTranslation();
   const openLink = e => {
     e.preventDefault();
-    shell.openExternal('https://solana.com/');
+    shell.openExternal('https://solana-example-webwallet.herokuapp.com/');
   };
   return (
     <>
       <div className={cn(css.root, { [css.horizontal]: horizontal })}>
-        <div>Don&apos;t have a wallet?</div>
+        <div>{t('no_wallet')}</div>
         <button type="button" onClick={openLink}>
-          <div>Create a new wallet now</div>
+          <div>{t('create_new_wallet')}</div>
           <img src={arrowIcon} alt="" />
         </button>
       </div>

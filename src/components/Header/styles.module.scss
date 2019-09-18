@@ -10,14 +10,15 @@
 }
 
 .headerMenu {
+  letter-spacing: 2.5px;
   &::after {
     content: '';
     display: inline-block;
     width: 0;
     height: 0;
     border-style: solid;
-    border-width: 8px 5.5px 0 5.5px;
-    margin-left: 5px;
+    border-width: 8px 7px 0 7px;
+    margin-left: 8px;
     border-color: $white transparent transparent transparent;
   }
 }
@@ -28,9 +29,10 @@
   padding: 12px 10px;
   width: 147px;
   button {
+    white-space: nowrap;
     font-size: 12px;
     text-transform: uppercase;
-    line-height: 16px;
+    line-height: 20px;
     letter-spacing: 2.5px;
     color: $primary;
     background: none;

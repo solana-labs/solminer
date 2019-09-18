@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Typography, Switch, Card, HelpIcon } from 'components/UI';
 import { AppStore, StatsStore } from 'store';
+import { useTranslation } from 'react-i18next';
 import { CLUSTER_UPDATE_TIMEOUT } from '../../constants';
 import css from './styles.module.scss';
 
 const Mining = () => {
+  const { t } = useTranslation();
   const { stats, replicator, updateStats } = StatsStore;
   const { state } = AppStore;
   const [enabled, setEnabled] = useState(false);
@@ -29,14 +31,14 @@ const Mining = () => {
   return (
     <div>
       <div className={css.header}>
-        <Typography type="title">Mining</Typography>
+        <Typography type="title">{t('mining')}</Typography>
         <Typography className={css.statusTitle} type="subttl">
-          Status:
+          {t('status')}:
         </Typography>
-        <Typography className={css.status}>{state}</Typography>
+        <Typography className={css.status}>{t(state)}</Typography>
         <div className={css.switch}>
           <Switch
-            label={enabled ? 'Enabled:' : 'Disabled:'}
+            label={t(enabled ? 'enabled' : 'disabled')}
             checked={enabled}
             onChange={switchEnabled}
           />
@@ -45,25 +47,25 @@ const Mining = () => {
       <div className={css.cards}>
         <Card>
           <Typography className={css.cardTitle}>
-            Total Supply in SOL <HelpIcon />
+            {t('total_supply')} <HelpIcon />
           </Typography>
           <div className={css.val}>{stats.totalSupply}</div>
         </Card>
         <Card>
           <Typography className={css.cardTitle}>
-            Transaction Count <HelpIcon />
+            {t('tx_count')} <HelpIcon />
           </Typography>
           <div className={css.val}>{stats.transactionCount}</div>
         </Card>
         <Card>
           <Typography className={css.cardTitle}>
-            Total Mined Lamports <HelpIcon />
+            {t('total_mined')} <HelpIcon />
           </Typography>
           <div className={css.val}>{stats.totalMined}</div>
         </Card>
         <Card>
           <Typography className={css.cardTitle}>
-            Recently Mined Lamports <HelpIcon />
+            {t('recently_mined')} <HelpIcon />
           </Typography>
           <div className={css.val}>{stats.newMined}</div>
         </Card>

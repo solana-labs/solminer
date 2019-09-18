@@ -1,5 +1,6 @@
 import React from 'react';
 import { AppStore } from 'store';
+import { useTranslation } from 'react-i18next';
 import CreateWalletBtn from '../CreateWalletBtn';
 import { Button, Typography } from '../UI';
 import img from './assets/img.png';
@@ -7,6 +8,7 @@ import img2x from './assets/img@2x.png';
 import css from './styles.module.scss';
 
 const HowItWorks = () => {
+  const { t } = useTranslation();
   const { setScreen } = AppStore;
   const handleNext = () => setScreen('setupOne');
 
@@ -17,18 +19,18 @@ const HowItWorks = () => {
       </div>
       <div className={css.right}>
         <Typography className={css.title} type="title">
-          How It works
+          {t('how_it_works')}
         </Typography>
         <Typography className={css.subttl} type="subttl">
-          Step 1: Connect your wallet.
+          {t('step_1')}
         </Typography>
         <Typography className={css.subttl} type="subttl">
-          Step 2: Choose how many Gigabits of the Ledger you want to store
+          {t('step_2')}
         </Typography>
         <Typography className={css.desc} as="p">
-          The more GB you store the more money you make
+          {t('more_gb')}
         </Typography>
-        <Button onClick={handleNext}>Next</Button>
+        <Button onClick={handleNext}>{t('next')}</Button>
         <div className={css.newWallet}>
           <CreateWalletBtn />
         </div>

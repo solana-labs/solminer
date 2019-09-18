@@ -7,11 +7,13 @@ import Alerts from './Alerts';
 import ChangeWallet from './ChangeWallet';
 import HowItWorks from './HowItWorks';
 import StoredLedger from './StoredLedger';
+import WhatYouNeed from './WhatYouNeed';
 import SetupOne from './SetupStepOne';
 import SetupTwo from './SetupStepTwo';
 import Mining from './Mining';
 
 const screens = {
+  whatYouNeed: <WhatYouNeed />,
   howItWorks: <HowItWorks />,
   setupOne: <SetupOne />,
   setupTwo: <SetupTwo />,
