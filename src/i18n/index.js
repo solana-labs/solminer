@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from './LanguageDetector';
 
 import en from './en.json';
+import ru from './ru.json';
 
 i18n
   .use(LanguageDetector)
@@ -11,9 +12,10 @@ i18n
     fallbackLng: 'en',
     debug: true,
     defaultNS: 'common',
-    whitelist: ['en'],
+    whitelist: ['en', 'ru'],
     resources: {
       en: { common: en },
+      ru: { common: ru },
     },
     react: {
       wait: false,
