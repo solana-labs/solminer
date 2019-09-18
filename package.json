@@ -74,7 +74,7 @@
     "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
-    "@commitlint/config-conventional": "^8.1.0",
+    "@commitlint/config-conventional": "^8.2.0",
     "@commitlint/travis-cli": "^8.1.0",
     "@electron-forge/cli": "6.0.0-beta.45",
     "@electron-forge/maker-deb": "6.0.0-beta.45",
