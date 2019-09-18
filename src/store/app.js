@@ -1,9 +1,19 @@
 import LocalStore from 'electron-store';
-import { action, observable } from 'mobx';
+import { reaction, action, observable } from 'mobx';
+import i18n from '../i18n/index';
 
 const localStore = new LocalStore();
 
 class AppStore {
+  constructor() {
+    reaction(
+      () => this.locale,
+      locale => {
+        i18n.changeLanguage(locale);
+      }
+    );
+  }
+
   @observable depositPublicKey = localStore.get('depositPublicKey', '');
 
   @observable screen = 'whatYouNeed';
@@ -34,6 +44,12 @@ class AppStore {
   }
 
   @action.bound
+  switchLanguage(locale) {
+    this.locale = locale;
+    localStore.set('locale', locale);
+  }
+
+  @action.bound
   setSecretKey(secretKey) {
     this.secretKey = secretKey;
   }
@@ -55,5 +71,7 @@ class AppStore {
 }
 
 const store = new AppStore();
+
+store.switchLanguage(localStore.get('locale') || 'en');
 
 export default store;
