@@ -1,0 +1,46 @@
+{
+  "what_you_need": "What you need",
+  "min_space_required": "At least <strong>5 GB of extra space</strong> on your machine",
+  "min_bnd_requred": "Bandwidth speeds of at least <strong>50MB</strong>",
+  "turn_off_sleep_mode": "<strong>Turn off sleep mode</strong> on your machine while mining (if your machine is off, you will not earn rewards)",
+  "public_key": "<strong>Public key</strong> to deposit SOLs in your wallet.",
+  "no_wallet": " Don’t have a wallet?",
+  "create_new_wallet": "Create a new wallet now",
+  "keep_internet": "<strong>Keep your internet on</strong> at all times to keep earning",
+  "get_started": "Get started",
+
+  "how_it_works": "How it works",
+  "step_1": "Step 1: Connect your wallet.",
+  "step_2": "Step 2: Choose how many GB of the ledger you want to store",
+  "more_gb": "The more GB you store the more money you make",
+  "next": "Next",
+
+  "get_setup_up": "Let's get you set up!",
+  "step_1_of_2": "<strong>Step 1/2</strong>: Connect your wallet",
+  "enter_seed_valid_phrase": "Enter a valid seed phrase to connect your wallet",
+  "enter_seed_phrase": "Enter a seed phrase",
+  "seed_phrase_reqs": "Seed phrase should be 12 words in length.",
+  "connect_wallet": "Connect wallet",
+  "step_2_of_2": "<strong>Step 2/2</strong>: Next, you need to choose how many GB of the Ledger you want to store. The more you store the bigger the rewards.",
+  "gb_to_store": "GB of ledger to store",
+  "pro_tip": "Pro Tip: Not sure where to start? We suggest starting with 20GB, you can always increase of decrease at any time.",
+  "save": "Save",
+
+  "mining": "Mining",
+  "status": "Status",
+  "disabled": "Disabled",
+  "enabled": "Enabled",
+  "running": "Running",
+  "loading": "Loading",
+  "download": "Download",
+  "tx_count": "Transaction Count",
+  "total_supply": "Total Supply in SOL",
+  "total_mined": "Total Mined Lamports",
+  "recently_mined": "Recently Mined Lamports",
+
+  "change_wallet": "Change wallet",
+  "current_wallet": "Current wallet",
+  "stored_ledger": "stored ledger",
+
+  "alert_no_internet": "Not connected to the internet"
+}
