@@ -1,21 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
-import App from './app';
+import { render } from 'react-dom';
+import App from 'components/App';
 import pkg from '../package.json';
+import './styles/index.scss';
+import './i18n/index';
 
 window.document.title = `${pkg.name} ${pkg.version}`;
 
-const render = () => {
-  ReactDOM.render(
-    <AppContainer>
-      <App />
-    </AppContainer>,
-    document.getElementById('App')
-  );
-};
-
-render();
-if (module.hot) {
-  module.hot.accept(render);
-}
+render(<App />, document.getElementById('root'));

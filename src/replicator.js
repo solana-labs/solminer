@@ -16,6 +16,7 @@ import {
 import fs from 'mz/fs';
 import solanaInstallInit from './solana-install-init';
 import sleep from './sleep';
+import AppStore from './store/app';
 import url from './url';
 
 // TODO: https://github.com/solana-labs/solana/issues/4344
@@ -94,6 +95,7 @@ export default class Replicator {
     console.warn('^C');
     this.cmdCancel();
     await this.mainPromise;
+    AppStore.setState('disabled');
   }
 
   async clusterRestart() {
@@ -240,6 +242,7 @@ export default class Replicator {
     })();
 
     try {
+      AppStore.setState('loading');
       await Replicator.fkill();
 
       await this.cmd(solanaInstallInit, [
@@ -308,7 +311,7 @@ export default class Replicator {
         'show-storage-account',
         storageKeypair.publicKey.toString(),
       ]);
-
+      AppStore.setState('download');
       await this.cmd(solanaInstall, [
         '--config',
         this.solanaInstallConfig,
@@ -324,8 +327,10 @@ export default class Replicator {
         '--ledger',
         this.replicatorLedgerDir,
       ]);
+      AppStore.setState('running');
     } catch (err) {
       console.error('Replicator::main error:', err);
+      AppStore.setState('disabled');
     }
 
     if (!this.running) {
