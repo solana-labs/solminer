@@ -49,7 +49,9 @@ const Mining = () => {
           <Typography className={css.cardTitle}>
             {t('total_supply')} <HelpIcon />
           </Typography>
-          <div className={css.val}>{stats.totalSupply}</div>
+          <div className={css.val}>
+            {(stats.totalSupply / 2 ** 34).toFixed(2)}
+          </div>
         </Card>
         <Card>
           <Typography className={css.cardTitle}>
