@@ -9,7 +9,7 @@ import css from './styles.module.scss';
 
 const Setup = () => {
   const { t } = useTranslation();
-  const { setScreen, gb, setGigabites } = AppStore;
+  const { setScreen, gb, setGB } = AppStore;
   const handleSubmit = () => setScreen('mining');
 
   return (
@@ -25,7 +25,7 @@ const Setup = () => {
           <Typography className={css.formTitle} type="cardTitle">
             {t('gb_to_store')}
           </Typography>
-          <GBSlider onChange={setGigabites} values={gb.toJS()} />
+          <GBSlider onChange={setGB} values={gb.toJS()} />
           <div className={css.tip}>{t('pro_tip')}</div>
           <Button onClick={handleSubmit}>{t('save')}</Button>
         </div>

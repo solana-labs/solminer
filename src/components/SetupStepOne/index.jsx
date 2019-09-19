@@ -10,9 +10,7 @@ import css from './styles.module.scss';
 const Setup = () => {
   const { t } = useTranslation();
   const { setScreen, setSecretKey } = AppStore;
-  const [seedPhrase, setSeedPhrase] = useState(
-    'resemble orient middle honey call bench cluster tornado burger erode render prevent'
-  );
+  const [seedPhrase, setSeedPhrase] = useState('');
 
   const handleSeedChange = e => setSeedPhrase(e.target.value);
 
@@ -38,12 +36,14 @@ const Setup = () => {
           <Input
             value={seedPhrase}
             onChange={handleSeedChange}
-            placeholder="{t('enter_seed_phrase')}"
+            placeholder={t('enter_seed_phrase')}
           />
           <Typography className={css.formHint}>
             {t('seed_phrase_reqs')}
           </Typography>
-          <Button type="submit">{t('connect_wallet')}</Button>
+          <Button type="submit" disabled={!seedPhrase}>
+            {t('connect_wallet')}
+          </Button>
         </form>
       </Card>
       <CreateWalletBtn horizontal />

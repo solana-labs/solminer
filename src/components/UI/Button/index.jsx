@@ -1,10 +1,11 @@
 import React from 'react';
+import cn from 'classnames';
 import PropTypes from 'prop-types';
 import css from './styles.module.scss';
 
-const Button = props => (
-  <div className={css.root}>
-    <button type="button" className={css.btn} {...props} />
+const Button = ({ disabled, ...props }) => (
+  <div className={cn(css.root, { [css.disabled]: disabled })}>
+    <button type="button" className={css.btn} {...props} disabled={disabled} />
   </div>
 );
 
@@ -14,6 +15,7 @@ Button.propTypes = {
     PropTypes.string,
   ]).isRequired,
   onClick: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 
 export default Button;
