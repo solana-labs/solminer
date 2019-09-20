@@ -4,6 +4,9 @@
   display: inline-block;
   border: 1px solid $primary;
   padding: 5px;
+  &.disabled {
+    opacity: .4;
+  }
 }
 .btn {
   border: none;
