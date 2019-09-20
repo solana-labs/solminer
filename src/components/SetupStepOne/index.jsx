@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
 import { AppStore } from 'store';
 import { Card, Button, Typography, Input } from 'components/UI';
-import CreateWalletBtn from 'components/CreateWalletBtn';
 import { useTranslation, Trans } from 'react-i18next';
+import CreateWalletBtn from 'components/CreateWalletBtn';
 import generateKeys from '../../utils/generateKeys';
 import Squares from '../UI/Squares';
 import css from './styles.module.scss';
 
 const Setup = () => {
   const { t } = useTranslation();
-  const { setScreen, setSecretKey } = AppStore;
+  const { setScreen, setSecretKey, setDepositPublicKey } = AppStore;
   const [seedPhrase, setSeedPhrase] = useState('');
 
   const handleSeedChange = e => setSeedPhrase(e.target.value);
 
   const handleSubmit = e => {
     e.preventDefault();
-    const { secretKey } = generateKeys(seedPhrase);
+    const { publicKey, secretKey } = generateKeys(seedPhrase);
     setSecretKey(secretKey);
+    setDepositPublicKey(publicKey);
     setScreen('setupTwo');
   };
   return (

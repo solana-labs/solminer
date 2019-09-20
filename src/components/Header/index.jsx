@@ -24,7 +24,7 @@ const Header = () => {
         <ToggleContent
           toggle={toggleShown => (
             <div onClick={toggleShown} className={css.headerMenu}>
-              4553.....5684
+              SETTINGS
             </div>
           )}
           content={hide => (
