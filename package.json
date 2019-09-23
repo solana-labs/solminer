@@ -31,7 +31,7 @@
     "@material-ui/lab": "^4.0.0-alpha.25",
     "@solana/web3.js": "^0.19.4",
     "@material-ui/lab": "^4.0.0-alpha.27",
-    "@solana/web3.js": "^0.19.3",
+    "@solana/web3.js": "^0.19.5",
     "@svgr/webpack": "^4.3.2",
     "autoscroll-react": "^3.2.0",
     "bip39": "^3.0.2",
