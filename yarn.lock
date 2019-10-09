@@ -1551,10 +1551,10 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
-"@solana/web3.js@^0.19.8":
-  version "0.19.8"
-  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.19.8.tgz#65d17520ad2a1bf245e22a00f25cc0b183ee3a90"
-  integrity sha512-cwZYKje8d+qt8LjiMncVoGMN0bpW8m1+Hm1cjvDXsLKIjQWwD66KRd1gNek9Do7gav0YLOyabCP/XyC93y42ow==
+"@solana/web3.js@^0.19.13":
+  version "0.19.13"
+  resolved "https://registry.yarnpkg.com/@solana/web3.js/-/web3.js-0.19.13.tgz#4de0135829b24f647efa320541f1364402435626"
+  integrity sha512-freYg41sVDZNArHZxE1fOlpHZmyQpPUUjo8FzAlqrfohU6bNFS5nsP6IpEwNUiQKURp643vv4SWk/oh3jHHZDQ==
   dependencies:
     "@babel/runtime" "^7.3.1"
     bn.js "^5.0.0"
@@ -1566,7 +1566,7 @@
     node-fetch "^2.2.0"
     npm-run-all "^4.1.5"
     rpc-websockets "^4.3.3"
-    superstruct "^0.6.0"
+    superstruct "^0.7.0"
     tweetnacl "^1.0.0"
     ws "^7.0.0"
 
@@ -10922,10 +10922,10 @@ sumchecker@^3.0.0:
   dependencies:
     debug "^4.1.0"
 
-superstruct@^0.6.0:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-0.6.2.tgz#c5eb034806a17ff98d036674169ef85e4c7f6a1c"
-  integrity sha512-lvA97MFAJng3rfjcafT/zGTSWm6Tbpk++DP6It4Qg7oNaeM+2tdJMuVgGje21/bIpBEs6iQql1PJH6dKTjl4Ig==
+superstruct@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-0.7.0.tgz#0bb8fd19173271ee86d5ef71d9e5af5eda1ae93d"
+  integrity sha512-dtqeKdBjiri64K1mPtc5yFSUcUEnK4r6I6GX9DXSb00aZ08Md7c8UvNRMCtXbi1P9t59KbmVwVrYLt1wUyNv9Q==
   dependencies:
     clone-deep "^2.0.1"
     kind-of "^6.0.1"
