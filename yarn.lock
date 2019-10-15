@@ -9542,10 +9542,10 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-range@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/react-range/-/react-range-1.4.1.tgz#f211c0fbf9695bf46bcfcef3047bc46c1dbf3f9b"
-  integrity sha512-uzqRgrFZzQI96H7vS7WNE8yyVrZzNq0N1JJMhgFb9BxBGBzy0LHbZjyhLiSZrbJTFkPD0hC99Z5U/2sGEeuy+Q==
+react-range@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/react-range/-/react-range-1.4.2.tgz#1d3706b792fd1dcab005e4fe17f28a9a21c1f994"
+  integrity sha512-cKMwCkehubdiKbyHkSXa2wwGYHBVLmqfAeBR0R4hbT9Eew3DtON8yTaIvw6y8a1eVSPFZMyCw2qBCh387Qj5uw==
 
 react-switch@^5.0.1:
   version "5.0.1"
