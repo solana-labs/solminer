@@ -74,7 +74,7 @@
     "@babel/plugin-proposal-decorators": "^7.4.4",
     "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.3",
-    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-react": "^7.6.3",
     "@commitlint/config-conventional": "^8.2.0",
     "@commitlint/travis-cli": "^8.2.0",
     "@electron-forge/cli": "6.0.0-beta.45",
