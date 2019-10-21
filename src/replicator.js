@@ -12,6 +12,7 @@ import {
   sendAndConfirmTransaction,
   Account,
   SystemProgram,
+  SOL_LAMPORTS,
 } from '@solana/web3.js';
 import fs from 'mz/fs';
 import solanaInstallInit from './solana-install-init';
@@ -19,7 +20,7 @@ import sleep from './sleep';
 import url from './url';
 
 // TODO: https://github.com/solana-labs/solana/issues/4344
-const airdropAmount = 100000;
+const airdropAmount = SOL_LAMPORTS;
 
 export default class Replicator {
   constructor(connection) {
