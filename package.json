@@ -30,7 +30,7 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.25",
     "@solana/web3.js": "^0.19.4",
-    "@material-ui/lab": "^4.0.0-alpha.28",
+    "@material-ui/lab": "^4.0.0-alpha.29",
     "@solana/web3.js": "^0.20.1",
     "@svgr/webpack": "^4.3.3",
     "autoscroll-react": "^3.2.0",
