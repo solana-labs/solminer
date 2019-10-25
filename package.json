@@ -57,7 +57,7 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-hot-loader": "^4.12.12",
-    "react-i18next": "^10.13.1",
+    "react-i18next": "^11.0.0",
     "react-range": "^1.4.2",
     "react-switch": "^5.0.1",
     "react-transition-group": "^4.2.2",
