@@ -25,7 +25,13 @@ module.exports = {
     packageManager: 'yarn',
     icon: 'src/images/icon/solminer',
     extraResource: solanaInstallInit,
-    osxSign: !!process.env.TRAVIS, // Only sign if running on Travis CI
+    osxSign: {
+	"keychain": "solana-build.keychain",
+	"gatekeeper-assess": false,
+	"hardened-runtime": true,
+	"entitlements": "src/entitlements.plist",
+	"entitlements-inherit": "src/entitlements.plist"    
+    }, // Only sign if running on Travis CI
   },
   makers: [
     {
