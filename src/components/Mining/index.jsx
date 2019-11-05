@@ -10,7 +10,7 @@ const Mining = () => {
   const { t } = useTranslation();
   const { stats, replicator, updateStats } = StatsStore;
   const { state } = AppStore;
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(true);
   const timeout = useRef();
   const titleMsg = t('mining');
   const switchEnabled = val => {
