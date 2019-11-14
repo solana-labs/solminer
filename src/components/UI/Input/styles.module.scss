@@ -22,7 +22,7 @@
   letter-spacing: .5px;
   border: none;
   width: 100%;
-  padding: 0 15px;
+  padding: 5px;
   &::placeholder {
     color: $input-placeholder;
   }
@@ -32,13 +32,11 @@
   background: #000;
   display: flex;
   align-items:center;
-  padding: 10px;
+  padding: 10px 15px;
 }
 
-.checkSvg {
-
+.eyeIcon:hover {
+  background: #ffffff;
+  cursor: pointer;
 }
 
-.crossSvg {
-
-}
