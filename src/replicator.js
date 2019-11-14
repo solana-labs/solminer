@@ -243,6 +243,7 @@ export default class Replicator {
 
     try {
       AppStore.setState('loading');
+      console.log('loading!000000000000------');
       await Replicator.fkill();
 
       await this.cmd(solanaInstallInit, [

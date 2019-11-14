@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Typography, Switch, Card, HelpIcon } from 'components/UI';
+import { Typography, Switch, Card, HelpIcon, TitleWithImage } from 'components/UI';
 import { AppStore, StatsStore } from 'store';
 import { useTranslation } from 'react-i18next';
 import { CLUSTER_UPDATE_TIMEOUT } from '../../constants';
@@ -10,8 +10,9 @@ const Mining = () => {
   const { t } = useTranslation();
   const { stats, replicator, updateStats } = StatsStore;
   const { state } = AppStore;
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(true);
   const timeout = useRef();
+  const titleMsg = t('mining');
   const switchEnabled = val => {
     setEnabled(val);
     if (val) {
@@ -31,7 +32,7 @@ const Mining = () => {
   return (
     <div>
       <div className={css.header}>
-        <Typography type="title">{t('mining')}</Typography>
+        <TitleWithImage title={titleMsg} />
         <Typography className={css.statusTitle} type="subttl">
           {t('status')}:
         </Typography>
@@ -50,26 +51,28 @@ const Mining = () => {
             {t('total_supply')} <HelpIcon />
           </Typography>
           <div className={css.val}>
-            {(stats.totalSupply / 2 ** 34).toFixed(2)}
+            {(stats.totalSupply / 2 ** 34).toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}
           </div>
         </Card>
         <Card>
           <Typography className={css.cardTitle}>
             {t('tx_count')} <HelpIcon />
           </Typography>
-          <div className={css.val}>{stats.transactionCount}</div>
+          <div className={css.val}>{stats.transactionCount.toLocaleString(undefined, {maximumFractionDigits:2})}</div>
         </Card>
         <Card>
           <Typography className={css.cardTitle}>
             {t('total_mined')} <HelpIcon />
           </Typography>
-          <div className={css.val}>{stats.totalMined}</div>
+          <div className={css.val}>{stats.totalMined.toLocaleString()}</div>
         </Card>
         <Card>
           <Typography className={css.cardTitle}>
             {t('recently_mined')} <HelpIcon />
           </Typography>
-          <div className={css.val}>{stats.newMined}</div>
+          <div className={css.val}>{stats.newMined.toLocaleString()}</div>
         </Card>
       </div>
     </div>

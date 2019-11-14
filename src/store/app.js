@@ -26,7 +26,7 @@ class AppStore {
 
   @observable gb = [20];
 
-  @observable state = 'disabled';
+  @observable state = 'running';
 
   @action.bound
   setScreen(screen) {

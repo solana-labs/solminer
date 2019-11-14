@@ -4,6 +4,17 @@
   margin-bottom: 16px;
 }
 
+.titleWrap {
+  position: relative;
+}
+
+.titleImg {
+  position: absolute;
+  top: -10px;
+  left: -60px;
+  z-index: -1;
+}
+
 .step {
   margin-bottom: 40px;
   line-height: 1.2;

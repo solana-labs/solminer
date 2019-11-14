@@ -11,18 +11,18 @@
 
   "how_it_works": "How it works",
   "step_1": "Step 1: Connect your wallet.",
-  "step_2": "Step 2: Choose how many GB of the ledger you want to store",
-  "more_gb": "The more GB you store the more money you make",
+  "step_2": "Step 2: Choose how many gigabits of the ledger you want to store",
+  "more_gb": "The more Gigabits you store the more money you make",
   "next": "Next",
 
   "get_setup_up": "Let's get you set up!",
-  "step_1_of_2": "<strong>Step 1/2</strong>: Connect your wallet",
+  "step_1_of_2": "<strong>Step 1 of 2</strong>: Connect your wallet.",
   "enter_seed_valid_phrase": "Enter a valid seed phrase to connect your wallet",
-  "enter_seed_phrase": "Enter a seed phrase",
+  "enter_seed_phrase": "Enter seed phrase",
   "seed_phrase_reqs": "Seed phrase should be 12 words in length.",
   "connect_wallet": "Connect wallet",
-  "step_2_of_2": "<strong>Step 2/2</strong>: Next, you need to choose how many GB of the Ledger you want to store. The more you store the bigger the rewards.",
-  "gb_to_store": "GB of ledger to store",
+  "step_2_of_2": "<strong>Step 2 of 2</strong>: Next, you need to choose how many Gigabits of the Ledger you want to store. The more you store the bigger the rewards.",
+  "gb_to_store": "Gigabites of ledger to store",
   "pro_tip": "Pro Tip: Not sure where to start? We suggest starting with 20GB, you can always increase of decrease at any time.",
   "save": "Save",
 
@@ -35,7 +35,7 @@
   "download": "Download",
   "tx_count": "Transaction Count",
   "total_supply": "Total Supply in SOL",
-  "total_mined": "Total Mined Lamports",
+  "total_mined": "My Mined Lamports",
   "recently_mined": "Recently Mined Lamports",
 
   "change_wallet": "Change wallet",
