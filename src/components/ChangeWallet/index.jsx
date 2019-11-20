@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AppStore } from 'store';
-import { Card, Button, Typography, Input } from 'components/UI';
+import { Card, Button, Typography, Input, TitleWithImage } from 'components/UI';
 import { useTranslation } from 'react-i18next';
 import CreateWalletBtn from 'components/CreateWalletBtn';
 import CloseIcon from '../../images/icon/close.svg';
@@ -26,11 +26,13 @@ const Change = () => {
     setDepositPublicKey(publicKey);
   };
 
+  const titleMsg = 'change wallet';
+
   const close = () => setScreen('mining');
   return (
     <div>
       <Typography className={css.title} type="title">
-        Change wallet
+        <TitleWithImage title={titleMsg} />
         <button type="button" className={css.close} onClick={close}>
           <CloseIcon width={19} height={19} fill="#fff" />
         </button>

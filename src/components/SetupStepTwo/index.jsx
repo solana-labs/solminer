@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { Card, Button, Typography } from 'components/UI';
+import { Card, Button, Typography, TitleWithImage } from 'components/UI';
 import { AppStore } from 'store';
 import { useTranslation, Trans } from 'react-i18next';
 import GBSlider from '../GBSlider';
@@ -9,16 +9,15 @@ import css from './styles.module.scss';
 
 const Setup = () => {
   const { t } = useTranslation();
+  const titleMsg = t('get_setup_up');
+  const isSmall = true;
   const { setScreen, gb, setGB } = AppStore;
   const handleSubmit = () => setScreen('mining');
-
   return (
     <div>
-      <Typography className={css.title} type="title">
-        {t('get_setup_up')}
-      </Typography>
+      <TitleWithImage title={titleMsg} />
       <Typography className={css.step}>
-        <Trans i18nKey="step_2_of_2" /> {t('more_gb')}
+        <Trans i18nKey="step_2_of_2" />
       </Typography>
       <Card>
         <div>
@@ -27,7 +26,7 @@ const Setup = () => {
           </Typography>
           <GBSlider onChange={setGB} values={gb.toJS()} />
           <div className={css.tip}>{t('pro_tip')}</div>
-          <Button onClick={handleSubmit}>{t('save')}</Button>
+          <Button onClick={handleSubmit} small={isSmall}>{t('save')}</Button>
         </div>
       </Card>
       <Squares />

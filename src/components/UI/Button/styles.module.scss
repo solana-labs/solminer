@@ -7,12 +7,20 @@
 }
 .btn {
   border: none;
-  height: 48px;
+  height: $button-height;
   background-color: $primary;
   text-transform: uppercase;
   color: $black;
   font-weight: bold;
-  font-size: 15px;
-  letter-spacing: 2.5px;
+  font-size: 12.2376px;
+  min-width: 196px;
+  line-height: 16px;
+  letter-spacing: 2.03959px;
+}
+.small {
+  padding: 0 39px;
+  min-width: 0;
+}
+.long {
   min-width: 196px;
 }
