@@ -10,17 +10,35 @@ import css from './styles.module.scss';
 const Setup = () => {
   const { t } = useTranslation();
   const { setScreen, setSecretKey, setDepositPublicKey } = AppStore;
-  const [seedPhrase, setSeedPhrase] = useState('');
 
-  const handleSeedChange = e => setSeedPhrase(e.target.value);
+  const [seedPhrase, setSeedPhrase] = useState('');
+  const [isPhraseInvalid, setPhraseInvalid] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleSeedChange = e => {
+    const phrase = e.target.value;
+    try {
+      setSeedPhrase(phrase);
+      setErrorMessage('');
+      generateKeys(phrase);
+      setPhraseInvalid(false);
+    } catch (err) {
+      setPhraseInvalid(true);
+    }
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
-    const { publicKey, secretKey } = generateKeys(seedPhrase);
-    setSecretKey(secretKey);
-    setDepositPublicKey(publicKey);
-    setScreen('setupTwo');
+    try {
+      const { publicKey, secretKey } = generateKeys(seedPhrase);
+      setSecretKey(secretKey);
+      setDepositPublicKey(publicKey);
+      setScreen('setupTwo');
+    } catch (err) {
+      setErrorMessage(err.message);
+    }
   };
+
   return (
     <div>
       <Typography className={css.title} type="title">
@@ -38,9 +56,14 @@ const Setup = () => {
             value={seedPhrase}
             onChange={handleSeedChange}
             placeholder={t('enter_seed_phrase')}
+            isSuccess={!isPhraseInvalid}
           />
-          <Typography className={css.formHint}>
-            {t('seed_phrase_reqs')}
+          <Typography
+            className={`${css.formHint} ${
+              isPhraseInvalid ? css.helpBlockError : css.helpBlockSuccess
+            }`}
+          >
+            {errorMessage === '' ? t('seed_phrase_reqs') : `${errorMessage}`}
           </Typography>
           <Button type="submit" disabled={!seedPhrase}>
             {t('connect_wallet')}

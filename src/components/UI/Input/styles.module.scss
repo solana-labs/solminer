@@ -3,6 +3,15 @@
 .root {
   border: 1px solid $input-background;
   padding: 5px;
+  display: flex;
+}
+
+.success {
+  border: 1px solid $primary;
+}
+
+.error {
+  border: 1px solid $pink;
 }
 
 .input {
@@ -13,8 +22,20 @@
   letter-spacing: .5px;
   border: none;
   width: 100%;
-  padding: 0 15px;
+  padding: 5px;
   &::placeholder {
     color: $input-placeholder;
   }
+}
+
+.icon {
+  background: #000;
+  display: flex;
+  align-items:center;
+  padding: 10px 15px;
+}
+
+.eyeIcon:hover {
+  background: #ffffff;
+  cursor: pointer;
 }
