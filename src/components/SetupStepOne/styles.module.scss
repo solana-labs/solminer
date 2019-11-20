@@ -1,3 +1,5 @@
+@import "~styles/vars";
+
 .title {
   margin-bottom: 16px;
 }
@@ -14,4 +16,15 @@
 .formHint {
   margin-top: 23px;
   margin-bottom: 26px;
+  line-height: 26px;
+  letter-spacing: 0.5px;
+  margin-left: 9.36px;
+}
+
+.helpBlockSuccess {
+  color: $primary;
+}
+
+.helpBlockError {
+  color: $pink;
 }

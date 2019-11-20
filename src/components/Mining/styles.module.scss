@@ -3,15 +3,17 @@
 .header {
   display: flex;
   align-items: center;
-  margin-bottom: 42px;
+  margin-bottom: 22px;
 }
 
 .statusTitle {
   margin-left: 15px;
   margin-right: 8px;
+  margin-bottom: 14px;
 }
 
 .status {
+  margin-bottom: 13px;
   text-transform: capitalize;
 }
 

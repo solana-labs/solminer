@@ -5,4 +5,5 @@ export { default as Input } from './Input';
 export { default as Logo } from './Logo';
 export { default as RangeSlider } from './RangeSlider';
 export { default as Switch } from './Switch';
+export { default as TitleWithImage } from './TitleWithImage';
 export { default as Typography } from './Typography';
