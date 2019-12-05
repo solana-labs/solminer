@@ -2,12 +2,30 @@ const os = require('os');
 const path = require('path');
 const process = require('process');
 const fs = require('fs');
+const url = require('url');
 
 const dotexe = os.type() === 'Windows_NT' ? '.exe' : '';
 const solanaInstallInit = `solana-install-init${dotexe}`;
 
+const iconUrl = url.format({
+  pathname: path.join(__dirname, 'src/images/icon/solminer.icns'),
+  protocol: 'file',
+  slashes: true,
+});
+
 const electronWinstallerConfig = {
   name: 'solminer',
+  iconUrl,
+  setupIcon: 'src/images/icon/solminer.ico',
+  loadingGif: 'src/images/solminer.gif',
+  setupExe: 'solminer.exe',
+  noMsi: false,
+};
+
+const electronInstallerDMG = {
+  name: 'SolminerMacOsApp',
+  icon: 'src/images/icon/solminer.icns',
+  background: 'src/images/solminer.png',
 };
 {
   const certificateFile = path.join(__dirname, 'cert', 'solana.pfx');
@@ -15,7 +33,6 @@ const electronWinstallerConfig = {
   if (fs.existsSync(certificateFile) && typeof certificateFile === 'string') {
     electronWinstallerConfig.certificatePassword = certificatePassword;
     electronWinstallerConfig.certificateFile = certificateFile;
-    // eslint-disable-next-line no-console
     console.log(`Will sign windows installer with ${certificateFile}`);
   }
 }
@@ -25,7 +42,15 @@ module.exports = {
     packageManager: 'yarn',
     icon: 'src/images/icon/solminer',
     extraResource: solanaInstallInit,
-    osxSign: !!process.env.TRAVIS, // Only sign if running on Travis CI
+    afterCopy: ['./src/hooks/after-copy.js'],
+    appCategoryType: 'public.app-category.developer-tools',
+    osxSign: {
+      keychain: 'solana-build.keychain',
+      'gatekeeper-assess': false,
+      'hardened-runtime': true,
+      entitlements: 'src/entitlements.plist',
+      'entitlements-inherit': 'src/entitlements.plist',
+    }, // Only sign if running on Travis CI
   },
   makers: [
     {
@@ -41,7 +66,7 @@ module.exports = {
     {
       name: '@electron-forge/maker-dmg',
       config: {
-        icon: 'src/images/icon/solminer.icns',
+        ...electronInstallerDMG,
       },
     },
     {
