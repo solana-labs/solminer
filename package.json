@@ -39,9 +39,9 @@
     "got": "^9.6.0",
     "i18next": "^17.0.16",
     "jsonfile": "^5.0.0",
-    "mz": "^2.7.0",
     "mobx": "^5.13.0",
     "mobx-react-lite": "^1.4.1",
+    "mz": "^2.7.0",
     "node-fetch": "^2.6.0",
     "promisify-child-process": "^3.1.1",
     "prop-types": "^15.7.2",
@@ -55,7 +55,8 @@
     "rimraf": "^3.0.0",
     "tweetnacl": "^1.0.1",
     "update-electron-app": "^1.5.0",
-    "use-onclickoutside": "^0.3.1"
+    "use-onclickoutside": "^0.3.1",
+    "yarn": "^1.21.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.0",
